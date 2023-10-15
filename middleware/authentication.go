@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-	"web-template/service"
-	"web-template/util"
+	"blog-backend/service"
+	"blog-backend/util"
 )
 
 func ApiKeyAuthenticationMiddleware() gin.HandlerFunc {

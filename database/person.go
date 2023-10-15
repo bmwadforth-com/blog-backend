@@ -2,9 +2,9 @@ package database
 
 import (
 	"context"
-	"web-template/mapper"
-	"web-template/models"
-	"web-template/util"
+	"blog-backend/mapper"
+	"blog-backend/models"
+	"blog-backend/util"
 )
 
 func GetPeople() util.DataResponse[[]models.PersonModel] {

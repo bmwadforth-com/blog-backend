@@ -2,7 +2,7 @@ package mapper
 
 import (
 	"github.com/google/uuid"
-	"web-template/models"
+	"blog-backend/models"
 )
 
 func MapPersonCreateRequest(request models.PersonCreateRequest) models.PersonModel {

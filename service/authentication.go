@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/bmwadforth/jwt"
 	"time"
-	"web-template/util"
+	"blog-backend/util"
 )
 
 func NewBearerToken() []byte {
 	key := []byte(util.Config.JwtSigningKey)
 
 	claims := jwt.NewClaimSet()
-	claims.Add(string(jwt.Audience), "web-template")
-	claims.Add(string(jwt.Subject), "web-template")
+	claims.Add(string(jwt.Audience), "blog-backend")
+	claims.Add(string(jwt.Subject), "blog-backend")
 	claims.Add(string(jwt.IssuedAt), time.Now())
 
 	//Create new HS256 token, set claims and key

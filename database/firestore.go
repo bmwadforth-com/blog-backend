@@ -3,7 +3,7 @@ package database
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"web-template/util"
+	"blog-backend/util"
 )
 
 var databaseConnection *firestore.Client

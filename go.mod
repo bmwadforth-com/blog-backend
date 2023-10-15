@@ -1,16 +1,16 @@
-module web-template
+module blog-backend
 
 go 1.21.3
 
 require (
 	cloud.google.com/go/firestore v1.13.0
 	github.com/bmwadforth/jwt v0.0.0-20200808103042-0cfe6fb60acf
+	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.3.0
 	github.com/sethvargo/go-envconfig v0.9.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/crypto v0.9.0
-	google.golang.org/api v0.128.0
 )
 
 require (
@@ -52,6 +52,7 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
+	google.golang.org/api v0.128.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc // indirect

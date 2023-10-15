@@ -3,9 +3,9 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"web-template/database"
-	"web-template/models"
-	"web-template/util"
+	"blog-backend/database"
+	"blog-backend/models"
+	"blog-backend/util"
 )
 
 // CreatePerson example godoc
