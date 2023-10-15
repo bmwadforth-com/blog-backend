@@ -1,10 +1,16 @@
 package controllers
 
 import (
+	"blog-backend/database"
+	"blog-backend/util"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"blog-backend/util"
 )
+
+type HealthCheckResponse struct {
+	Database bool `json:"database"`
+}
 
 // HealthCheck Generic healthcheck endpoint godoc
 // @Summary HealthCheck
@@ -16,7 +22,15 @@ import (
 // @Success 200 {object}  util.ApiResponse
 // @Router /healthz [get]
 func HealthCheck(c *gin.Context) {
-	statusCode, response := util.NewResponse(http.StatusOK, "healthz", nil, nil)
-	// TODO write logic in here to ping upstream services, if any are down return bad healthchecl
-	c.JSON(statusCode, response)
+	healthCheck := HealthCheckResponse{Database: true}
+	response := util.NewResponse(http.StatusOK, "healthz", healthCheck, nil)
+	dbErr := database.HealthCheck()
+	if dbErr != nil {
+		healthCheck.Database = false
+		response.SetData(healthCheck)
+		response.SetError(errors.New("the api is not healthy"))
+		response.SetStatusCode(http.StatusBadGateway)
+	}
+
+	c.JSON(response.GetStatusCode(), response)
 }

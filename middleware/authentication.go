@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"blog-backend/service"
+	"blog-backend/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-	"blog-backend/service"
-	"blog-backend/util"
 )
 
 func ApiKeyAuthenticationMiddleware() gin.HandlerFunc {
@@ -17,7 +17,8 @@ func ApiKeyAuthenticationMiddleware() gin.HandlerFunc {
 		if len(apiKey) == 2 && apiKey[1] == envApiKey {
 			c.Status(200)
 		} else {
-			c.AbortWithStatusJSON(util.NewResponse(http.StatusUnauthorized, "invalid authentication", nil, nil))
+			response := util.NewResponse(http.StatusUnauthorized, "invalid authentication", "", nil)
+			c.AbortWithStatusJSON(response.GetStatusCode(), response)
 			return
 		}
 	}
@@ -27,14 +28,16 @@ func BearerAuthenticationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		bearer, err := util.GetBearerToken(c.Request)
 		if err != nil {
-			c.AbortWithStatusJSON(util.NewResponse(http.StatusUnauthorized, "invalid authentication", nil, nil))
+			response := util.NewResponse(http.StatusUnauthorized, "invalid authentication", "", nil)
+			c.AbortWithStatusJSON(response.GetStatusCode(), response)
 			return
 		}
 
 		if service.ValidateBearerToken(bearer) {
 			c.Status(200)
 		} else {
-			c.AbortWithStatusJSON(util.NewResponse(http.StatusUnauthorized, "invalid authentication", nil, nil))
+			response := util.NewResponse(http.StatusUnauthorized, "invalid authentication", "", nil)
+			c.AbortWithStatusJSON(response.GetStatusCode(), response)
 			return
 		}
 	}

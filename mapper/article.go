@@ -1,10 +1,6 @@
 package mapper
 
-import (
-	"github.com/google/uuid"
-	"blog-backend/models"
-)
-
+/*
 func MapPersonCreateRequest(request models.PersonCreateRequest) models.PersonModel {
 	return models.PersonModel{
 		Identifier:  uuid.New().String(),
@@ -14,3 +10,5 @@ func MapPersonCreateRequest(request models.PersonCreateRequest) models.PersonMod
 		DateOfBirth: request.DateOfBirth,
 	}
 }
+
+*/
