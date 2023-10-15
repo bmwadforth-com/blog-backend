@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./web .
 
+RUN npm run artifactregistry-login
 RUN npm install
 RUN npm run build
 
@@ -14,7 +15,7 @@ ENV APP_ENV=PRODUCTION
 
 WORKDIR /app
 
-COPY --from=node-env /app/web/build ./web/build
+COPY --from=node-env /app/build ./web/build
 
 # Download Go modules
 COPY go.mod go.sum ./
