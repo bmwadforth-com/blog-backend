@@ -1,0 +1,14 @@
+{
+  "ProjectId": "digital-node-1176",
+  "JwtSigningKey": "SECRET_PRIVATE_KEY",
+  "ApiKey": "SECRET_API_KEY",
+  "FireStoreDatabase": "bmwadforth-development",
+  "Database": {
+    "Host": "",
+    "Name": "",
+    "User": "",
+    "Pass": "",
+    "Port": "",
+    "SSL": false
+  }
+}
