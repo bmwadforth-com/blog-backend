@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -60,8 +61,19 @@ func main() {
 		r.Use(gin.Logger())
 	}
 
+	wwwroot := EmbedFolder(web, "web/build")
+	staticServer := static.Serve("/", wwwroot)
+
 	r.Use(gin.Recovery())
-	r.Use(static.Serve("/", EmbedFolder(web, "web/build")))
+	r.Use(staticServer)
+	r.NoRoute(func(c *gin.Context) {
+		if c.Request.Method == http.MethodGet &&
+			!strings.ContainsRune(c.Request.URL.Path, '.') &&
+			!strings.HasPrefix(c.Request.URL.Path, "/api/") {
+			c.Request.URL.Path = "/"
+			staticServer(c)
+		}
+	})
 
 	v1 := r.Group("/api/v1")
 	v1.GET("/ping", controllers.Ping)
