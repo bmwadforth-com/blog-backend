@@ -4,8 +4,10 @@ import (
 	"blog-backend/mapper"
 	"blog-backend/models"
 	"blog-backend/util"
+	"cloud.google.com/go/firestore"
 	"context"
 	"errors"
+	"time"
 )
 
 func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
@@ -32,6 +34,7 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	}
 
 	err = docs[0].DataTo(&article)
+	article.DocumentRef = docs[0].Ref.ID
 	if err != nil {
 		dataResponse.SetError(errors.New("error unable to deserialize record"), util.DbresultError)
 		return dataResponse
@@ -73,6 +76,35 @@ func CreateArticle(request models.CreateArticleRequest) util.DataResponse[string
 
 	article := mapper.MapArticleCreatRequest(request)
 	_, _, err := client.Collection("articles").Add(ctx, article)
+	if err != nil {
+		dataResponse.SetError(err, util.DbresultError)
+		return dataResponse
+	}
+
+	dataResponse.SetData(article.ArticleId)
+
+	return dataResponse
+}
+
+func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
+	dataResponse := util.NewDataResponse("successfully updated article", "")
+	ctx := context.Background()
+	client, _ := createClient(ctx)
+	defer client.Close()
+
+	_, err := client.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
+		"Title":       article.Title,
+		"Description": article.Description,
+		"Published":   article.Published,
+		"ContentId":   article.ContentId,
+		"ThumbnailId": article.ThumbnailId,
+		"UpdatedDate": time.Now(),
+	}, firestore.MergeAll)
+	if err != nil {
+		dataResponse.SetError(err, util.DbresultError)
+		return dataResponse
+	}
+
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse

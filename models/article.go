@@ -12,6 +12,7 @@ type ArticleModel struct {
 	ContentId   string    `json:"contentId"`
 	CreatedDate time.Time `json:"createdDate"`
 	UpdatedDate time.Time `json:"updatedDate"`
+	DocumentRef string
 	Published   bool
 }
 

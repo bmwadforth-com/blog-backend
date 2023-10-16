@@ -9,30 +9,6 @@ import (
 	"time"
 )
 
-func createCloudStorageClient(ctx context.Context) (*storage.Client, error) {
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		util.SLogger.Errorf("failed to create cloud storage client: %v", err)
-		return nil, err
-	}
-
-	projectId := util.Config.ProjectId
-	bucketName := util.Config.CloudStorageBucket
-
-	bucket := client.Bucket(bucketName)
-
-	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
-	defer cancel()
-	if err := bucket.Create(ctx, projectId, nil); err != nil {
-		util.SLogger.Errorf("failed to create cloud storage client: %v", err)
-		return nil, err
-	}
-
-	// it is the responsibility of the calling function to ensure that the connection is closed
-	// defer client.Close()
-	return client, nil
-}
-
 func streamFileUpload(object string, content []byte) error {
 	bucket := util.Config.CloudStorageBucket
 	ctx := context.Background()

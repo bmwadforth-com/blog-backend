@@ -14,9 +14,10 @@ func UploadArticleContent(articleId string, file multipart.File, fileSize int64)
 	if contentId == "" {
 		contentId = uuid.New().String()
 		article.ContentId = contentId
+		database.UpdateArticle(article)
 	}
 
-	fileBytes := make([]byte, 0, fileSize)
+	fileBytes := make([]byte, fileSize)
 	_, err := file.Read(fileBytes)
 	if err != nil {
 		util.SLogger.Errorf("failed to upload article content: %v", err)
@@ -27,9 +28,6 @@ func UploadArticleContent(articleId string, file multipart.File, fileSize int64)
 	if err != nil {
 		return "", err
 	}
-
-	// TODO: write contentId back into article
-	// database.UpdateArticle(articleId, article)
 
 	return contentId, nil
 }
