@@ -79,8 +79,9 @@ func main() {
 	v1.GET("/ping", controllers.Ping)
 	v1.GET("/healthz", controllers.HealthCheck)
 
-	//v1.POST("/person", controllers.CreatePerson)
-	//v1.GET("/person", controllers.GetPeople)
+	v1.POST("/article", controllers.CreateArticle)
+	v1.POST("/article/:articleId/content", controllers.UploadArticle)
+	v1.GET("/articles", controllers.GetArticles)
 
 	v1ApiKeyAuthenticated := r.Group("/api/v1")
 	v1ApiKeyAuthenticated.Use(middleware.ApiKeyAuthenticationMiddleware())

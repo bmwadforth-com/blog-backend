@@ -4,6 +4,7 @@ go 1.21.3
 
 require (
 	cloud.google.com/go/firestore v1.13.0
+	cloud.google.com/go/storage v1.29.0
 	github.com/bmwadforth/jwt v0.0.0-20200808103042-0cfe6fb60acf
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -17,6 +18,7 @@ require (
 	cloud.google.com/go v0.110.2 // indirect
 	cloud.google.com/go/compute v1.19.3 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	cloud.google.com/go/iam v0.13.0 // indirect
 	cloud.google.com/go/longrunning v0.5.0 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect

@@ -8,15 +8,6 @@ import (
 
 var databaseConnection *firestore.Client
 
-type EDatabaseResult uint
-
-var (
-	DbresultNotFound   EDatabaseResult = 0
-	DbresultError      EDatabaseResult = 1
-	DbresultOk         EDatabaseResult = 2
-	DbresultIncomplete EDatabaseResult = 3
-)
-
 func createClient(ctx context.Context) (*firestore.Client, error) {
 	client, err := firestore.NewClientWithDatabase(ctx, util.Config.ProjectId, util.Config.FireStoreDatabase)
 	if err != nil {

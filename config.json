@@ -3,6 +3,7 @@
   "JwtSigningKey": "SECRET_PRIVATE_KEY",
   "ApiKey": "SECRET_API_KEY",
   "FireStoreDatabase": "bmwadforth-development",
+  "CloudStorageBucket": "bmwadforth_dev",
   "Database": {
     "Host": "",
     "Name": "",

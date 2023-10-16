@@ -1,14 +1,32 @@
 package mapper
 
-/*
-func MapPersonCreateRequest(request models.PersonCreateRequest) models.PersonModel {
-	return models.PersonModel{
-		Identifier:  uuid.New().String(),
-		FirstName:   request.FirstName,
-		MiddleName:  request.MiddleName,
-		LastName:    request.LastName,
-		DateOfBirth: request.DateOfBirth,
-	}
-}
+import (
+	"blog-backend/models"
+	"github.com/google/uuid"
+	"time"
+)
 
-*/
+func MapArticleCreatRequest(request models.CreateArticleRequest) models.ArticleModel {
+	timeNow := time.Now()
+
+	articleModel := models.ArticleModel{
+		ArticleId:   uuid.New().String(),
+		Title:       request.Title,
+		Description: request.Description,
+		ThumbnailId: "",
+		ContentId:   "",
+		CreatedDate: timeNow,
+		UpdatedDate: timeNow,
+		Published:   false,
+	}
+
+	if request.ThumbnailId != "" {
+		articleModel.ThumbnailId = request.ThumbnailId
+	}
+
+	if request.ContentId != "" {
+		articleModel.ContentId = request.ContentId
+	}
+
+	return articleModel
+}

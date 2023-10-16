@@ -12,11 +12,12 @@ var Config configuration
 var IsProduction bool
 
 type configuration struct {
-	ProjectId         string `json:"ProjectId" env:"WEB_TEMPLATE__PROJECTID"`
-	ApiKey            string `json:"ApiKey" env:"WEB_TEMPLATE__APIKEY"`
-	JwtSigningKey     string `json:"jwtSigningKey" env:"WEB_TEMPLATE__JWTSIGNINGKEY"`
-	FireStoreDatabase string `json:"fireStoreDatabase" env:"WEB_TEMPLATE__FIRESTOREDATABASE"`
-	Database          struct {
+	ProjectId          string `json:"ProjectId" env:"WEB_TEMPLATE__PROJECTID"`
+	ApiKey             string `json:"ApiKey" env:"WEB_TEMPLATE__APIKEY"`
+	JwtSigningKey      string `json:"jwtSigningKey" env:"WEB_TEMPLATE__JWTSIGNINGKEY"`
+	FireStoreDatabase  string `json:"fireStoreDatabase" env:"WEB_TEMPLATE__FIRESTOREDATABASE"`
+	CloudStorageBucket string `json:"cloudStorageBucket" env:"WEB_TEMPLATE__CLOUDSTORAGEBUCKET"`
+	Database           struct {
 		Host     string `json:"host" env:"WEB_TEMPLATE__DATABASE_HOST"`
 		Name     string `json:"name" env:"WEB_TEMPLATE__DATABASE_NAME"`
 		Username string `json:"user" env:"WEB_TEMPLATE__DATABASE_USERNAME"`
