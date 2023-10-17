@@ -24,3 +24,10 @@ type CreateArticleRequest struct {
 	ThumbnailId string `json:"thumbnailId"`
 	ContentId   string `json:"contentId"`
 }
+
+// CreateArticleContentResponse Article content/thumbnail creation response
+// @Article content/thumbnail creation response
+type CreateArticleContentResponse struct {
+	ThumbnailId string `json:"thumbnailId"`
+	ContentId   string `json:"contentId"`
+}
