@@ -18,8 +18,12 @@ jobs:
 
       - name: Generate Swagger
         run: |
-          docker pull quay.io/goswagger/swagger
-          alias swagger='docker run --rm -it  --user $(id -u):$(id -g) -e GOPATH=$(go env GOPATH):/go -v $HOME:$HOME -w $(pwd) quay.io/goswagger/swagger'
+          apt update -y
+          apt install -y apt-transport-https gnupg curl
+          curl -1sLf 'https://dl.cloudsmith.io/public/go-swagger/go-swagger/gpg.2F8CB673971B5C9E.key' | apt-key add -
+          curl -1sLf 'https://dl.cloudsmith.io/public/go-swagger/go-swagger/config.deb.txt?distro=debian&codename=any-version' > /etc/apt/sources.list.d/go-swagger-go-swagger.list
+          apt update -y
+          apt install swagger -y
           swagger generate spec -o ./artifacts/swagger.json
 
       - name: Archive Artifacts
