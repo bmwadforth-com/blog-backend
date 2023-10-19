@@ -8,6 +8,7 @@ type ArticleModel struct {
 	ArticleId   string    `json:"articleId"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
+	Slug        string    `json:"slug"`
 	ThumbnailId string    `json:"thumbnailId"`
 	ContentId   string    `json:"contentId"`
 	CreatedDate time.Time `json:"created"`
@@ -21,6 +22,7 @@ type ArticleModel struct {
 type CreateArticleRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Slug        string `json:"slug"`
 	ThumbnailId string `json:"thumbnailId"`
 	ContentId   string `json:"contentId"`
 }

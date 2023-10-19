@@ -13,6 +13,7 @@ func MapArticleCreatRequest(request models.CreateArticleRequest) models.ArticleM
 		ArticleId:   uuid.New().String(),
 		Title:       request.Title,
 		Description: request.Description,
+		Slug:        request.Slug,
 		ThumbnailId: "",
 		ContentId:   "",
 		CreatedDate: timeNow,
