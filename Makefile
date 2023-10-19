@@ -10,4 +10,4 @@ backend_start:
 frontend_build:
 	cd ./web && npm run artifactregistry-login && npm install && npm run build && cd ..
 
-build_all: swagger backend_build frontend_build backend_start
+build_all: frontend_build swagger backend_build backend_start
