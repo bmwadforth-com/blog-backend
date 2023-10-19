@@ -66,3 +66,18 @@ func LoginUser(c *gin.Context) {
 	response := util.NewResponse(http.StatusOK, "Successful", token, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
+
+// GetSessions example godoc
+// @Summary Get user sessions
+// @Schemes
+// @Description Get user sessions
+// @Tags Get user sessions
+// @Accept json
+// @Produce json
+// @Success 200 {object}  util.ApiResponse
+// @Router /sessions [get]
+func GetSessions(c *gin.Context) {
+	sessions := service.Sessions
+	response := util.NewResponse(http.StatusOK, "Successful", sessions, nil)
+	c.JSON(response.GetStatusCode(), response)
+}

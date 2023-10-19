@@ -89,6 +89,7 @@ func main() {
 	v1BearerAuthenticated.Use(middleware.BearerAuthenticationMiddleware())
 	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
 	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticle)
+	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {
