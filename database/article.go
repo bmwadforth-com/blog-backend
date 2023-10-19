@@ -44,6 +44,40 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	return dataResponse
 }
 
+func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
+	var article models.ArticleModel
+	dataResponse := util.NewDataResponse("success", article)
+	ctx := context.Background()
+	client, _ := createClient(ctx)
+	defer client.Close()
+
+	docs, err := client.Collection("articles").Where("Slug", "==", slug).Documents(ctx).GetAll()
+	if err != nil {
+		dataResponse.SetError(err, util.DbresultError)
+		return dataResponse
+	}
+
+	if len(docs) == 0 {
+		dataResponse.SetError(errors.New("no articles found"), util.DbresultNotFound)
+		return dataResponse
+	}
+
+	if len(docs) > 1 {
+		dataResponse.SetError(errors.New("error multiple articles found"), util.DbresultError)
+		return dataResponse
+	}
+
+	err = docs[0].DataTo(&article)
+	article.DocumentRef = docs[0].Ref.ID
+	if err != nil {
+		dataResponse.SetError(errors.New("error unable to deserialize record"), util.DbresultError)
+		return dataResponse
+	}
+	dataResponse.SetData(article)
+
+	return dataResponse
+}
+
 func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	var articles []models.ArticleModel
 	var article models.ArticleModel

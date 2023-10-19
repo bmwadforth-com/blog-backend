@@ -60,7 +60,44 @@ func GetArticles(c *gin.Context) {
 	c.JSON(response.GetStatusCode(), response)
 }
 
-func UploadArticle(c *gin.Context) {
+// GetArticleBySlug example godoc
+// @Summary Get article by slug
+// @Schemes
+// @Description Get article by slug
+// @Tags Get article by slug
+// @Accept json
+// @Produce json
+// @Success 200 {object}  util.ApiResponse
+// @Router /article/:slug [get]
+func GetArticleBySlug(c *gin.Context) {
+	slug := c.Param("slug")
+
+	r := database.GetArticleBySlug(slug)
+	if r.GetError() != nil {
+		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
+
+		if r.GetDataResult() == util.DbresultNotFound {
+			response = util.NewResponse(http.StatusNotFound, "Unable to find article", "", r.GetError())
+		}
+
+		c.JSON(response.GetStatusCode(), response)
+		return
+	}
+
+	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
+	c.JSON(response.GetStatusCode(), response)
+}
+
+// UploadArticleContent example godoc
+// @Summary Upload article content
+// @Schemes
+// @Description Upload article content
+// @Tags Upload article content
+// @Accept json
+// @Produce json
+// @Success 200 {object}  util.ApiResponse
+// @Router /article/:articleId/content [post]
+func UploadArticleContent(c *gin.Context) {
 	articleId := c.Param("articleId")
 	contentFileHeader, _ := c.FormFile("content")
 	thumbnailFileHeader, _ := c.FormFile("thumbnail")

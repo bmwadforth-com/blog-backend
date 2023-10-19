@@ -79,6 +79,7 @@ func main() {
 	v1.GET("/ping", controllers.Ping)
 	v1.GET("/healthz", controllers.HealthCheck)
 	v1.GET("/articles", controllers.GetArticles)
+	v1.GET("/article/:slug", controllers.GetArticleBySlug)
 	v1.POST("/login", controllers.LoginUser)
 
 	v1ApiKeyAuthenticated := r.Group("/api/v1")
@@ -88,7 +89,7 @@ func main() {
 	v1BearerAuthenticated := r.Group("/api/v1")
 	v1BearerAuthenticated.Use(middleware.BearerAuthenticationMiddleware())
 	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
-	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticle)
+	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
 	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
 
 	err := r.SetTrustedProxies([]string{})
