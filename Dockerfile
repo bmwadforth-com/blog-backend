@@ -17,9 +17,9 @@ WORKDIR /app
 COPY --from=node-env /app/build ./web/build
 COPY go.mod go.sum ./
 RUN go mod download
-COPY ./ ./
-
 RUN CGO_ENABLED=0 GOOS=linux go build -o /blog-backend
+
+COPY ./blog-backend ./
 
 EXPOSE 8080
 CMD ["/blog-backend"]
