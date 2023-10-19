@@ -2,17 +2,19 @@ package main
 
 import (
 	"blog-backend/controllers"
+	"blog-backend/docs"
 	"blog-backend/middleware"
 	"blog-backend/util"
 	"embed"
 	"flag"
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"io/fs"
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -64,6 +66,8 @@ func main() {
 	wwwroot := EmbedFolder(web, "web/build")
 	staticServer := static.Serve("/", wwwroot)
 
+	docs.SwaggerInfo.BasePath = "/api/v1"
+
 	r.Use(gin.Recovery())
 	r.Use(staticServer)
 	r.NoRoute(func(c *gin.Context) {
@@ -91,6 +95,10 @@ func main() {
 	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
 	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
 	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
+
+	if !util.IsProduction {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {

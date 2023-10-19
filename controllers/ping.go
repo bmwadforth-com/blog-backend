@@ -12,7 +12,7 @@ import (
 // @Tags Ping
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200
 // @Router /ping [get]
 func Ping(c *gin.Context) {
 	c.Status(http.StatusOK)

@@ -19,19 +19,22 @@ jobs:
         with:
           go-version: '^1.21.3'
 
-      - name: Generate Swagger
-        run: |
-          download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
-          jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
-          curl -o /usr/local/bin/swagger -L'#' "$download_url"
-          chmod +x /usr/local/bin/swagger
-          mkdir ./artifacts
-          swagger generate spec -o ./artifacts/swagger.json
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/416443939101/locations/global/workloadIdentityPools/bmwadforth-iam/providers/bmwadforth-iam-github'
+          service_account: 'bmwadforth-dev-ci@digital-node-1176.iam.gserviceaccount.com'              
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          version: '>= 363.0.0'
 
       - name: Archive Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: artifacts
           path: |
-            ./artifacts
+            ./docs
           retention-days: 1

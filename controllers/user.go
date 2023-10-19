@@ -14,10 +14,10 @@ import (
 // @Schemes
 // @Description Create user
 // @Tags Create user
-// @Param Create user body models.CreateUserRequest true "Create user model object"
+// @Param user body models.CreateUserRequest true "Create user model object"
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[string]
 // @Router /user [post]
 func CreateUser(c *gin.Context) {
 	var request models.CreateUserRequest
@@ -43,10 +43,10 @@ func CreateUser(c *gin.Context) {
 // @Schemes
 // @Description Login user
 // @Tags Login user
-// @Param Create user body models.LoginUserRequest true "Login user model object"
+// @Param User body models.LoginUserRequest true "Login user model object"
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[string]
 // @Router /login [post]
 func LoginUser(c *gin.Context) {
 	var request models.LoginUserRequest
@@ -74,7 +74,7 @@ func LoginUser(c *gin.Context) {
 // @Tags Get user sessions
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[models.UserSessionModel]
 // @Router /sessions [get]
 func GetSessions(c *gin.Context) {
 	sessions := service.Sessions

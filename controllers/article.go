@@ -15,10 +15,10 @@ import (
 // @Schemes
 // @Description Create article
 // @Tags Create article
-// @Param Create article body models.CreateArticleRequest true "Create article model object"
+// @Param article body models.CreateArticleRequest true "Create article model object"
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[string]
 // @Router /article [post]
 func CreateArticle(c *gin.Context) {
 	var request models.CreateArticleRequest
@@ -46,7 +46,7 @@ func CreateArticle(c *gin.Context) {
 // @Tags Get articles
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[[]models.ArticleModel]
 // @Router /articles [get]
 func GetArticles(c *gin.Context) {
 	r := database.GetArticles()
@@ -67,8 +67,9 @@ func GetArticles(c *gin.Context) {
 // @Tags Get article by slug
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
-// @Router /article/:slug [get]
+// @Param slug path string true "Article slug"
+// @Success 200 {object}  util.ApiResponse[models.ArticleModel]
+// @Router /article/{slug} [get]
 func GetArticleBySlug(c *gin.Context) {
 	slug := c.Param("slug")
 
@@ -95,8 +96,9 @@ func GetArticleBySlug(c *gin.Context) {
 // @Tags Upload article content
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
-// @Router /article/:articleId/content [post]
+// @Success 200 {object}  util.ApiResponse[models.CreateArticleContentResponse]
+// @Param articleId path string true "Article Identifier"
+// @Router /article/{articleId}/content [post]
 func UploadArticleContent(c *gin.Context) {
 	articleId := c.Param("articleId")
 	contentFileHeader, _ := c.FormFile("content")

@@ -16,4 +16,11 @@ Simply run `go run main.go` from the project directory, and it will start a web 
 When the application is deployed in production, it reads its configuration from environment variables. All environment variables that start with `WEB_TEMPLATE__` are loaded. When the application is in development mode, it will read the configuration from `config.json`.
 
 ## Swagger
-Todo
+To generate a swagger specification, ensure under `controllers` your documentation is correct and then run the following commands from the root directory:
+
+```
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init
+```
+
+You should then have your swagger files accessible under `docs`. Additionally, in non-production (when APP_ENV=DEVELOPMENT) when starting the application - you can access the swagger documentation at `localhost:8080/swagger/index.html`.

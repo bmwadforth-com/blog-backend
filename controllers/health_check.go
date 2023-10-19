@@ -19,7 +19,7 @@ type HealthCheckResponse struct {
 // @Tags HealthCheck
 // @Accept json
 // @Produce json
-// @Success 200 {object}  util.ApiResponse
+// @Success 200 {object}  util.ApiResponse[HealthCheckResponse]
 // @Router /healthz [get]
 func HealthCheck(c *gin.Context) {
 	healthCheck := HealthCheckResponse{Database: true}
