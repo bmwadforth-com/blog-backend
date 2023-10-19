@@ -25,6 +25,7 @@ jobs:
           jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
           curl -o /usr/local/bin/swagger -L'#' "$download_url"
           chmod +x /usr/local/bin/swagger
+          mkdir ./artifacts
           swagger generate spec -o ./artifacts/swagger.json
 
       - name: Archive Artifacts
