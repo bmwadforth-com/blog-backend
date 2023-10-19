@@ -26,4 +26,4 @@ ENV APP_ENV=PRODUCTION
 WORKDIR /app
 COPY --from=backend-build /app/blog-backend ./
 EXPOSE 8080
-CMD ["blog-backend"]
+CMD ["/app/blog-backend"]
