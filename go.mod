@@ -1,6 +1,6 @@
 module blog-backend
 
-go 1.23
+go 1.21.3
 
 require (
 	cloud.google.com/go/firestore v1.13.0
