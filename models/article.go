@@ -10,8 +10,8 @@ type ArticleModel struct {
 	Description string    `json:"description"`
 	ThumbnailId string    `json:"thumbnailId"`
 	ContentId   string    `json:"contentId"`
-	CreatedDate time.Time `json:"createdDate"`
-	UpdatedDate time.Time `json:"updatedDate"`
+	CreatedDate time.Time `json:"created"`
+	UpdatedDate time.Time `json:"updated"`
 	DocumentRef string
 	Published   bool
 }

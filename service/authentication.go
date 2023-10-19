@@ -1,18 +1,18 @@
 package service
 
 import (
+	"blog-backend/util"
 	"fmt"
 	"github.com/bmwadforth/jwt"
 	"time"
-	"blog-backend/util"
 )
 
-func NewBearerToken() []byte {
+func NewBearerToken(username string) []byte {
 	key := []byte(util.Config.JwtSigningKey)
 
 	claims := jwt.NewClaimSet()
 	claims.Add(string(jwt.Audience), "blog-backend")
-	claims.Add(string(jwt.Subject), "blog-backend")
+	claims.Add(string(jwt.Subject), username)
 	claims.Add(string(jwt.IssuedAt), time.Now())
 
 	//Create new HS256 token, set claims and key

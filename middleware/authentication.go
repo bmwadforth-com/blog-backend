@@ -5,16 +5,14 @@ import (
 	"blog-backend/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strings"
 )
 
 func ApiKeyAuthenticationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		envApiKey := util.Config.ApiKey
-		fullApiKey := c.GetHeader("Authorization")
-		apiKey := strings.Split(fullApiKey, "Bearer ")
+		fullApiKey := c.GetHeader("X-Api-Key")
 
-		if len(apiKey) == 2 && apiKey[1] == envApiKey {
+		if fullApiKey == envApiKey {
 			c.Status(200)
 		} else {
 			response := util.NewResponse(http.StatusUnauthorized, "invalid authentication", "", nil)
