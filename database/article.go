@@ -7,6 +7,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -35,6 +36,14 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 
 	err = docs[0].DataTo(&article)
 	article.DocumentRef = docs[0].Ref.ID
+	if article.ContentId != "" {
+		article.ContentURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ContentId)
+	}
+
+	if article.ThumbnailId != "" {
+		article.ThumbnailURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ThumbnailId)
+	}
+
 	if err != nil {
 		dataResponse.SetError(errors.New("error unable to deserialize record"), util.DbresultError)
 		return dataResponse
@@ -69,6 +78,14 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 
 	err = docs[0].DataTo(&article)
 	article.DocumentRef = docs[0].Ref.ID
+	if article.ContentId != "" {
+		article.ContentURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ContentId)
+	}
+
+	if article.ThumbnailId != "" {
+		article.ThumbnailURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ThumbnailId)
+	}
+
 	if err != nil {
 		dataResponse.SetError(errors.New("error unable to deserialize record"), util.DbresultError)
 		return dataResponse
@@ -80,7 +97,6 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 
 func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	var articles []models.ArticleModel
-	var article models.ArticleModel
 	dataResponse := util.NewDataResponse("successfully read articles", articles)
 	ctx := context.Background()
 	client, _ := createClient(ctx)
@@ -93,7 +109,17 @@ func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	}
 
 	for _, doc := range docs {
+		article := models.ArticleModel{}
 		doc.DataTo(&article)
+		article.DocumentRef = doc.Ref.ID
+		if article.ContentId != "" {
+			article.ContentURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ContentId)
+		}
+
+		if article.ThumbnailId != "" {
+			article.ThumbnailURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ThumbnailId)
+		}
+
 		articles = append(articles, article)
 	}
 

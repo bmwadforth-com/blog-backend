@@ -5,16 +5,18 @@ import "time"
 // ArticleModel A model that describes an article
 // @Description A model that describes an article
 type ArticleModel struct {
-	ArticleId   string    `json:"articleId"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Slug        string    `json:"slug"`
-	ThumbnailId string    `json:"thumbnailId"`
-	ContentId   string    `json:"contentId"`
-	CreatedDate time.Time `json:"created"`
-	UpdatedDate time.Time `json:"updated"`
-	DocumentRef string    `json:"-"`
-	Published   bool      `json:"-"`
+	ArticleId    string    `json:"articleId"`
+	Title        string    `json:"title"`
+	Description  string    `json:"description"`
+	Slug         string    `json:"slug"`
+	ContentURL   string    `json:"contentUrl"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	ThumbnailId  string    `json:"-"`
+	ContentId    string    `json:"-"`
+	CreatedDate  time.Time `json:"created"`
+	UpdatedDate  time.Time `json:"updated"`
+	DocumentRef  string    `json:"documentRef"`
+	Published    bool      `json:"-"`
 }
 
 // CreateArticleRequest New article
@@ -22,9 +24,6 @@ type ArticleModel struct {
 type CreateArticleRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Slug        string `json:"slug"`
-	ThumbnailId string `json:"thumbnailId"`
-	ContentId   string `json:"contentId"`
 }
 
 // CreateArticleContentResponse Article content/thumbnail creation response

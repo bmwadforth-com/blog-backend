@@ -296,6 +296,9 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "documentRef": {
+                    "type": "string"
+                },
                 "slug": {
                     "type": "string"
                 },
@@ -325,16 +328,7 @@ const docTemplate = `{
             "description": "New article request",
             "type": "object",
             "properties": {
-                "contentId": {
-                    "type": "string"
-                },
                 "description": {
-                    "type": "string"
-                },
-                "slug": {
-                    "type": "string"
-                },
-                "thumbnailId": {
                     "type": "string"
                 },
                 "title": {

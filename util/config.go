@@ -17,14 +17,7 @@ type configuration struct {
 	JwtSigningKey      string `json:"jwtSigningKey" env:"WEB_TEMPLATE__JWTSIGNINGKEY"`
 	FireStoreDatabase  string `json:"fireStoreDatabase" env:"WEB_TEMPLATE__FIRESTOREDATABASE"`
 	CloudStorageBucket string `json:"cloudStorageBucket" env:"WEB_TEMPLATE__CLOUDSTORAGEBUCKET"`
-	Database           struct {
-		Host     string `json:"host" env:"WEB_TEMPLATE__DATABASE_HOST"`
-		Name     string `json:"name" env:"WEB_TEMPLATE__DATABASE_NAME"`
-		Username string `json:"user" env:"WEB_TEMPLATE__DATABASE_USERNAME"`
-		Password string `json:"pass" env:"WEB_TEMPLATE__DATABASE_PASSWORD"`
-		Port     string `json:"port" env:"WEB_TEMPLATE__DATABASE_PORT"`
-		SSL      bool   `json:"SSL" env:"WEB_TEMPLATE__DATABASE_SSL"`
-	} `json:"database"`
+	ContentURL         string `json:"contentURL" env:"WEB_TEMPLATE__CONTENTURL"`
 }
 
 func LoadConfiguration() {

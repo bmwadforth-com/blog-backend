@@ -4,12 +4,5 @@
   "ApiKey": "SECRET_API_KEY",
   "FireStoreDatabase": "bmwadforth-development",
   "CloudStorageBucket": "bmwadforth_dev",
-  "Database": {
-    "Host": "",
-    "Name": "",
-    "User": "",
-    "Pass": "",
-    "Port": "",
-    "SSL": false
-  }
+  "ContentURL": "https://storage.googleapis.com/bmwadforth_dev"
 }

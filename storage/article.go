@@ -3,6 +3,7 @@ package storage
 import (
 	"blog-backend/database"
 	"blog-backend/util"
+	"fmt"
 	"github.com/google/uuid"
 	"mime/multipart"
 )
@@ -14,6 +15,9 @@ type MultipartFile struct {
 
 func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *MultipartFile) (string, string, error) {
 	dataResponse := database.GetArticle(articleId)
+	if dataResponse.GetError() != nil {
+		return "", "", dataResponse.GetError()
+	}
 	article := dataResponse.Data
 
 	if article.ContentId == "" || article.ThumbnailId == "" {
@@ -36,7 +40,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			util.SLogger.Errorf("failed to upload article content: %v", err)
 			return "", "", err
 		}
-		err = streamFileUpload(article.ContentId, contentBytes)
+		err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ContentId), contentBytes)
 		if err != nil {
 			return "", "", err
 		}
@@ -50,7 +54,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			util.SLogger.Errorf("failed to upload article thumbnail: %v", err)
 			return "", "", err
 		}
-		err = streamFileUpload(article.ThumbnailId, thumbnailBytes)
+		err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ThumbnailId), thumbnailBytes)
 		if err != nil {
 			return "", "", err
 		}

@@ -15,6 +15,8 @@ definitions:
         type: string
       description:
         type: string
+      documentRef:
+        type: string
       slug:
         type: string
       thumbnailId:
@@ -34,13 +36,7 @@ definitions:
   models.CreateArticleRequest:
     description: New article request
     properties:
-      contentId:
-        type: string
       description:
-        type: string
-      slug:
-        type: string
-      thumbnailId:
         type: string
       title:
         type: string
