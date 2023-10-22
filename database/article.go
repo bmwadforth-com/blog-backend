@@ -17,7 +17,7 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("ArticleId", "==", articleId).Where("Published", "==", true).Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("articleId", "==", articleId).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -52,7 +52,7 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("Slug", "==", slug).Where("Published", "==", true).Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("slug", "==", slug).Where("published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -87,7 +87,7 @@ func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("Published", "==", true).Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -131,13 +131,15 @@ func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
 	defer client.Close()
 
 	_, err := client.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
-		"Title":       article.Title,
-		"Description": article.Description,
-		"Slug":        article.Slug,
-		"Published":   article.Published,
-		"ContentId":   article.ContentId,
-		"ThumbnailId": article.ThumbnailId,
-		"UpdatedDate": time.Now(),
+		"title":        article.Title,
+		"description":  article.Description,
+		"slug":         article.Slug,
+		"published":    article.Published,
+		"contentId":    article.ContentId,
+		"thumbnailId":  article.ThumbnailId,
+		"contentUrl":   article.ContentURL,
+		"thumbnailUrl": article.ThumbnailURL,
+		"updated":      time.Now(),
 	}, firestore.MergeAll)
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)

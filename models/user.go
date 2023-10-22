@@ -5,13 +5,13 @@ import "time"
 // UserModel A model that describes a user
 // @Description A model that describes a user
 type UserModel struct {
-	UserId      string    `json:"id"`
-	Username    string    `json:"username"`
-	Password    string    `json:"-"`
-	CreatedDate time.Time `json:"created"`
-	UpdatedDate time.Time `json:"updated"`
-	DocumentRef string    `json:"-"`
-	Active      bool      `json:"-"`
+	UserId      string    `json:"id" firestore:"id"`
+	Username    string    `json:"username" firestore:"username"`
+	Password    string    `json:"-" firestore:"password"`
+	CreatedDate time.Time `json:"created" firestore:"created"`
+	UpdatedDate time.Time `json:"updated" firestore:"updated"`
+	DocumentRef string    `json:"-" firestore:"-"`
+	Active      bool      `json:"-" firestore:"active"`
 }
 
 // UserSessionModel A model that describes a user session
