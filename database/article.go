@@ -199,6 +199,7 @@ func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
 	defer client.Close()
 
 	_, err := client.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
+		"articleId":    article.ArticleId,
 		"title":        article.Title,
 		"description":  article.Description,
 		"slug":         article.Slug,
