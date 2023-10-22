@@ -9,7 +9,7 @@ definitions:
     properties:
       articleId:
         type: string
-      contentId:
+      contentUrl:
         type: string
       created:
         type: string
@@ -19,7 +19,7 @@ definitions:
         type: string
       slug:
         type: string
-      thumbnailId:
+      thumbnailUrl:
         type: string
       title:
         type: string

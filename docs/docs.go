@@ -287,7 +287,7 @@ const docTemplate = `{
                 "articleId": {
                     "type": "string"
                 },
-                "contentId": {
+                "contentUrl": {
                     "type": "string"
                 },
                 "created": {
@@ -302,7 +302,7 @@ const docTemplate = `{
                 "slug": {
                     "type": "string"
                 },
-                "thumbnailId": {
+                "thumbnailUrl": {
                     "type": "string"
                 },
                 "title": {

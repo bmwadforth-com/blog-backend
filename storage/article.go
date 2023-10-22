@@ -23,10 +23,12 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 	if article.ContentId == "" || article.ThumbnailId == "" {
 		if article.ContentId == "" && content != nil {
 			article.ContentId = uuid.New().String()
+			article.ContentURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ContentId)
 		}
 
 		if article.ThumbnailId == "" && thumbnail != nil {
 			article.ThumbnailId = uuid.New().String()
+			article.ThumbnailURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ThumbnailId)
 		}
 
 		database.UpdateArticle(article)

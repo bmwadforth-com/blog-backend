@@ -276,7 +276,7 @@
                 "articleId": {
                     "type": "string"
                 },
-                "contentId": {
+                "contentUrl": {
                     "type": "string"
                 },
                 "created": {
@@ -291,7 +291,7 @@
                 "slug": {
                     "type": "string"
                 },
-                "thumbnailId": {
+                "thumbnailUrl": {
                     "type": "string"
                 },
                 "title": {
