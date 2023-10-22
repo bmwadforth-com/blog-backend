@@ -18,7 +18,7 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("ArticleId", "==", articleId).Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("ArticleId", "==", articleId).Where("Published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -60,7 +60,7 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("Slug", "==", slug).Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("Slug", "==", slug).Where("Published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -102,7 +102,7 @@ func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Documents(ctx).GetAll()
+	docs, err := client.Collection("articles").Where("Published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
