@@ -21,8 +21,8 @@ export const userStateSelector = selector<IUSerState>({
             if (tokenData) {
                 const apiService = new UserApiService();
                 const data = await apiService.userStatus();
-                if (data.payload?.token as string === window.localStorage.getItem('token')) {
-                    return { username:  data.payload?.userName as string, loggedInSince: new Date(data.payload?.loggedInSince as string) as Date, isLoggedIn: true }
+                if (data.data?.token as string === window.localStorage.getItem('token')) {
+                    return { username:  data.data?.userName as string, loggedInSince: new Date(data.data?.loggedInSince as string) as Date, isLoggedIn: true }
                 }
             }
 

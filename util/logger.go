@@ -17,7 +17,7 @@ func InitLogger() func(*zap.Logger) {
 	return func(logger *zap.Logger) {
 		err := logger.Sync()
 		if err != nil {
-			log.Fatalf("failed to flush log buffer: %v", err)
+			log.Printf("failed to flush log buffer: %v", err)
 		}
 	}
 }

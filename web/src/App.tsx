@@ -33,7 +33,7 @@ ReactGA.initialize(TRACKING_ID);
 export const ApplicationRoutes = {
     INDEX: '/',
     ARTICLES: '/articles',
-    ARTICLE: '/article/:articleId',
+    ARTICLE: '/article/:articleSlug',
     PROJECTS: 'projects',
     ABOUT: '/about',
     ADMIN: '/admin',

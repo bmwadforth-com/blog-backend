@@ -4,16 +4,16 @@ import {IApiResponse} from "../store/base";
 
 export default class ArticleApiService extends BaseApiService {
     public async getArticles(): Promise<IArticlesState> {
-        const response = await this.client.get<IArticlesState>('/article');
+        const response = await this.client.get<IArticlesState>('/articles');
 
         return response.data as IArticlesState;
     }
 
-    public async getArticle(id: string): Promise<IArticleState> {
-        const response = await this.client.get<IArticleState>(`/article/${id}`);
+    public async getArticle(slug: string): Promise<IArticleState> {
+        const response = await this.client.get<IArticleState>(`/article/${slug}`);
 
-        const {payload} = response.data;
-        const contentUrl = payload?.contentDataUrl;
+        const {data: payload} = response.data;
+        const contentUrl = payload?.contentUrl;
         if (contentUrl) {
             const contentResponse = await this.client.get(contentUrl);
             payload!.content = contentResponse.data;

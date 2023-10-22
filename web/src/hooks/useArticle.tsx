@@ -2,8 +2,8 @@ import {articleStateSelector, IArticleState} from "../store/articles/articlesSta
 import {useRecoilValueLoadable} from "recoil";
 import {useEffect} from "react";
 
-export default function useArticle(articleId: string): [boolean, IArticleState] {
-    const article = useRecoilValueLoadable(articleStateSelector(articleId));
+export default function useArticle(articleSlug: string): [boolean, IArticleState] {
+    const article = useRecoilValueLoadable(articleStateSelector(articleSlug));
 
     useEffect(() => {
         if (article.state === "hasError") {

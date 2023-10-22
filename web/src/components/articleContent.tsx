@@ -15,9 +15,9 @@ export interface IArticleTileProps {
 
 export default function ArticleContent() {
     const navigate = useNavigate();
-    let {articleId} = useParams();
-    const [loading, article] = useArticle(articleId as string);
-    const {payload} = article;
+    let {articleSlug} = useParams();
+    const [loading, article] = useArticle(articleSlug as string);
+    const {data: payload} = article;
     if (loading) return <Loading/>;
     if (payload?.content === undefined) return <h1>Error</h1>;
 

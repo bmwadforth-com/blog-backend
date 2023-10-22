@@ -44,7 +44,7 @@ export default function NewArticle() {
         try {
             const apiService = new ArticleApiService();
             const res = await apiService.createArticle(form.title, form.description);
-            setArticle({id: res.payload as number, title: form.title, description: form.description});
+            setArticle({id: res.data as number, title: form.title, description: form.description});
             setShowAlert({status: 'success', message: 'Successfully created article'});
         } catch (e) {
             setShowAlert({status: 'error', message: 'Failed to create article'});

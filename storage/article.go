@@ -40,7 +40,12 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			util.SLogger.Errorf("failed to upload article content: %v", err)
 			return "", "", err
 		}
-		err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ContentId), contentBytes)
+
+		if util.IsProduction {
+			err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ContentId), contentBytes)
+		} else {
+			err = streamFileUpload(fmt.Sprintf("development/%s/%s", article.Slug, article.ContentId), contentBytes)
+		}
 		if err != nil {
 			return "", "", err
 		}
@@ -54,7 +59,12 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			util.SLogger.Errorf("failed to upload article thumbnail: %v", err)
 			return "", "", err
 		}
-		err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ThumbnailId), thumbnailBytes)
+
+		if util.IsProduction {
+			err = streamFileUpload(fmt.Sprintf("%s/%s", article.Slug, article.ThumbnailId), thumbnailBytes)
+		} else {
+			err = streamFileUpload(fmt.Sprintf("development/%s/%s", article.Slug, article.ThumbnailId), thumbnailBytes)
+		}
 		if err != nil {
 			return "", "", err
 		}

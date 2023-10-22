@@ -16,7 +16,7 @@ export default function ArticleTile({article}: IArticleTileProps) {
           <CardMedia
             component="img"
             height="140"
-            image={article.thumbnailDataUrl}
+            image={article.thumbnailUrl}
             alt="Article thumbnail"
           />
           <CardContent>
@@ -31,7 +31,7 @@ export default function ArticleTile({article}: IArticleTileProps) {
               </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={() => navigate(`/article/${article.articleId}`)}>Read</Button>
+            <Button size="small" onClick={() => navigate(`/article/${article.slug}`)}>Read</Button>
           </CardActions>
         </Card>
       );

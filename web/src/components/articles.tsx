@@ -10,7 +10,7 @@ export default function Articles() {
     const [loading, articles] = useArticles();
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:600px)');
-    const {payload} = articles;
+    const {data: payload} = articles;
 
     if (loading) return <Loading />;
     if (payload === undefined) return <h1>Error</h1>

@@ -11,12 +11,11 @@ export interface IArticle {
     articleId: number;
     title: string;
     description: string;
-    thumbnailId: string;
-    contentId: string;
+    slug: string;
     createdDate: Date;
     updatedDate: Date;
-    thumbnailDataUrl: string;
-    contentDataUrl: string;
+    thumbnailUrl: string;
+    contentUrl: string;
     content?: string;
 }
 
@@ -44,15 +43,15 @@ export const articlesStateSelector = selector<IArticlesState>({
 
 const articlesState = atom<IArticlesState>({
     key: 'articlesState',
-    default: {message: '', payload: undefined, errors: undefined} as IArticlesState
+    default: {message: '', data: undefined, errors: undefined} as IArticlesState
 });
 
 export const articleStateSelector = selectorFamily<IArticleState, string>({
     key: 'articlesStateSelector',
-    get: (articleId: string) => async ({get}) => {
+    get: (articleSlug: string) => async ({get}) => {
         try {
             const apiService = new ArticleApiService();
-            return await apiService.getArticle(articleId);
+            return await apiService.getArticle(articleSlug);
         } catch (error) {
             throw error;
         }
@@ -61,7 +60,7 @@ export const articleStateSelector = selectorFamily<IArticleState, string>({
 
 const articleState = atom<IArticleState>({
     key: 'articleState',
-    default: {message: '', payload: undefined, errors: undefined} as IArticleState
+    default: {message: '', data: undefined, errors: undefined} as IArticleState
 });
 
 export const newArticleState = atom<INewArticleState>({

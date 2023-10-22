@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.13.0
 	cloud.google.com/go/storage v1.29.0
 	github.com/bmwadforth/jwt v0.0.0-20200808103042-0cfe6fb60acf
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.3.0

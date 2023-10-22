@@ -7,6 +7,7 @@ import (
 	"blog-backend/util"
 	"embed"
 	"flag"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -15,6 +16,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 var (
@@ -79,6 +81,18 @@ func main() {
 		}
 	})
 
+	if !util.IsProduction {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		r.Use(cors.New(cors.Config{
+			AllowOrigins:     []string{"http://localhost:3000"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
+			AllowHeaders:     []string{"Origin"},
+			ExposeHeaders:    []string{"Content-Length"},
+			AllowCredentials: true,
+			MaxAge:           12 * time.Hour,
+		}))
+	}
+
 	v1 := r.Group("/api/v1")
 	v1.GET("/ping", controllers.Ping)
 	v1.GET("/healthz", controllers.HealthCheck)
@@ -95,10 +109,6 @@ func main() {
 	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
 	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
 	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
-
-	if !util.IsProduction {
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	}
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {

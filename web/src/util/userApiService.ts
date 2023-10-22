@@ -16,7 +16,7 @@ export default class UserApiService extends BaseApiService {
             }
         });
 
-        window.localStorage.setItem('token', res.data.payload as string);
+        window.localStorage.setItem('token', res.data.data as string);
         
         return res.data;
     }

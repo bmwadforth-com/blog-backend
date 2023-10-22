@@ -5,6 +5,6 @@ export interface IApiError {
 
 export interface IApiResponse<T> {
     message: string;
-    payload?: T;
+    data?: T;
     errors?: IApiError[];
 }
