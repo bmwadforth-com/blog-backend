@@ -156,9 +156,3 @@ func UploadArticleContent(c *gin.Context) {
 	response := util.NewResponse(http.StatusOK, "successfully uploaded content", apiResponse, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
-
-func TempArticles(c *gin.Context) {
-	database.Temp()
-
-	c.JSON(200, nil)
-}

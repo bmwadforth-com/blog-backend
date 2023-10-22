@@ -80,74 +80,6 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 	return dataResponse
 }
 
-func Temp() {
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
-
-	docs, _ := client.Collection("articles").Documents(ctx).GetAll()
-
-	for _, doc := range docs {
-		article := models.ArticleModel{}
-		doc.DataTo(&article)
-
-		article.DocumentRef = doc.Ref.ID
-
-		client.Collection("articles").Doc(doc.Ref.ID).Update(ctx, []firestore.Update{
-			{
-				Path:  "ArticleId",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "ContentId",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "ContentURL",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "CreatedDate",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "Description",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "DocumentRef",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "Published",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "Slug",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "ThumbnailId",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "Title",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "UpdatedDate",
-				Value: firestore.Delete,
-			},
-			{
-				Path:  "ThumbnailURL",
-				Value: firestore.Delete,
-			},
-		})
-
-		UpdateArticle(article)
-	}
-}
-
 func GetArticles() util.DataResponse[[]models.ArticleModel] {
 	var articles []models.ArticleModel
 	dataResponse := util.NewDataResponse("successfully read articles", articles)
@@ -199,7 +131,6 @@ func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
 	defer client.Close()
 
 	_, err := client.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
-		"articleId":    article.ArticleId,
 		"title":        article.Title,
 		"description":  article.Description,
 		"slug":         article.Slug,
@@ -208,9 +139,7 @@ func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
 		"thumbnailId":  article.ThumbnailId,
 		"contentUrl":   article.ContentURL,
 		"thumbnailUrl": article.ThumbnailURL,
-		// TODO: remove created
-		"created": article.CreatedDate,
-		"updated": time.Now(),
+		"updated":      time.Now(),
 	}, firestore.MergeAll)
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)

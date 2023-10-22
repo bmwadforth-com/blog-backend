@@ -80,9 +80,7 @@ func main() {
 			staticServer(c)
 		}
 	})
-
-	r.GET("/temp", controllers.TempArticles)
-
+	
 	if !util.IsProduction {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 		r.Use(cors.New(cors.Config{
