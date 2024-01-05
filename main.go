@@ -60,7 +60,10 @@ func startGrpc() {
 		util.SLogger.Errorf("Failed to listen on port:%d : %v", *grpcPort, err)
 	}
 
-	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.BearerAuthenticationInterceptor))
+	opts := []grpc.ServerOption{
+		grpc.StreamInterceptor(middleware.BearerAuthenticationInterceptor),
+	}
+	s := grpc.NewServer(opts...)
 	GeminiService.RegisterGeminiServer(s, &Gemini.Server{})
 	if err := s.Serve(lis); err != nil {
 		util.SLogger.Panicf("Failed to start gRPC server: %v", err)

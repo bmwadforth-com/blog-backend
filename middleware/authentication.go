@@ -3,13 +3,13 @@ package middleware
 import (
 	"blog-backend/service"
 	"blog-backend/util"
-	"context"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"net/http"
+	"strings"
 )
 
 func ApiKeyAuthenticationMiddleware() gin.HandlerFunc {
@@ -46,21 +46,28 @@ func BearerAuthenticationMiddleware() gin.HandlerFunc {
 	}
 }
 
-func BearerAuthenticationInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
+func BearerAuthenticationInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	md, ok := metadata.FromIncomingContext(ss.Context())
 	if !ok {
-		return nil, status.Errorf(codes.InvalidArgument, "retrieving metadata failed")
+		return status.Errorf(codes.InvalidArgument, "missing metadata")
 	}
 
-	tokenSlice, ok := md["authorization"]
-	if !ok || len(tokenSlice) == 0 {
-		return nil, status.Errorf(codes.Unauthenticated, "JWT token is not provided")
+	// Check for the authorization metadata
+	values := md["authorization"]
+	if len(values) == 0 {
+		return status.Errorf(codes.Unauthenticated, "authorization token is not provided")
 	}
 
-	tokenString := tokenSlice[0]
+	// Expecting the value format to be "Bearer <token>"
+	token := values[0]
+
+	// Expecting the value format to be "<token>"
+	tokenString := strings.Replace(token, "Bearer ", "", 1)
+
 	if !service.ValidateBearerToken(tokenString) {
-		return nil, status.Errorf(codes.Unauthenticated, "invalid JWT token")
+		return status.Errorf(codes.Unauthenticated, "invalid JWT token")
 	}
 
-	return handler(ctx, req)
+	// Token is valid, proceed with the handler
+	return handler(srv, ss)
 }
