@@ -25,5 +25,5 @@ ENV PORT=8080
 ENV APP_ENV=PRODUCTION
 WORKDIR /app
 COPY --from=backend-build /app/blog-backend ./
-EXPOSE 8080
+EXPOSE 8080 8081
 CMD ["/app/blog-backend"]
