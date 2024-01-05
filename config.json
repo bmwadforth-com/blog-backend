@@ -4,5 +4,6 @@
   "ApiKey": "SECRET_API_KEY",
   "FireStoreDatabase": "bmwadforth-development",
   "CloudStorageBucket": "bmwadforth_dev",
-  "ContentURL": "https://cdn.bmwadforth.com/development"
+  "ContentURL": "https://cdn.bmwadforth.com/development",
+  "GeminiApiKey": "SECRET_API_KEY"
 }

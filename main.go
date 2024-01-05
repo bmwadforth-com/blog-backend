@@ -4,15 +4,20 @@ import (
 	"blog-backend/controllers"
 	"blog-backend/docs"
 	"blog-backend/middleware"
+	GeminiService "blog-backend/protocol_buffers/gemini_service"
+	Gemini "blog-backend/service"
 	"blog-backend/util"
 	"embed"
 	"flag"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"google.golang.org/grpc"
 	"io/fs"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -20,7 +25,8 @@ import (
 )
 
 var (
-	port = flag.Int("port", 8080, "The server port")
+	port     = flag.Int("port", 8080, "The server port")
+	grpcPort = flag.Int("grpcPort", 8081, "The grpc server port")
 
 	//go:embed web/build
 	web embed.FS
@@ -48,20 +54,24 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 	}
 }
 
-func main() {
-	flag.Parse()
-	logCleanup := util.InitLogger()
-	defer logCleanup(util.Logger)
+func startGrpc() {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *grpcPort))
+	if err != nil {
+		util.SLogger.Errorf("Failed to listen on port:%d : %v", *grpcPort, err)
+	}
 
+	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.BearerAuthenticationInterceptor))
+	GeminiService.RegisterGeminiServer(s, &Gemini.Server{})
+	if err := s.Serve(lis); err != nil {
+		util.SLogger.Panicf("Failed to start gRPC server: %v", err)
+	}
+}
+
+func startHttp() {
 	r := gin.New()
 
 	util.IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
-	if util.IsProduction {
-		util.LoadEnvironmentVariables()
-		gin.SetMode(gin.ReleaseMode)
-	} else {
-		util.LoadConfiguration()
-		gin.SetMode(gin.DebugMode)
+	if !util.IsProduction {
 		r.Use(gin.Logger())
 	}
 
@@ -80,7 +90,7 @@ func main() {
 			staticServer(c)
 		}
 	})
-	
+
 	if !util.IsProduction {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 		r.Use(cors.New(cors.Config{
@@ -115,8 +125,27 @@ func main() {
 		util.SLogger.Fatalf("an error has occurred: %v", err)
 	}
 
-	err = r.Run()
-	if err != nil {
-		util.SLogger.Fatalf("unable to start blog-backend: %v", err)
+	go func() {
+		if err := r.Run(); err != nil {
+			util.SLogger.Panicf("unable to start blog-backend: %v", err)
+		}
+	}()
+}
+
+func main() {
+	flag.Parse()
+	logCleanup := util.InitLogger()
+	defer logCleanup(util.Logger)
+
+	util.IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
+	if util.IsProduction {
+		util.LoadEnvironmentVariables()
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		util.LoadConfiguration()
+		gin.SetMode(gin.DebugMode)
 	}
+
+	startHttp()
+	startGrpc()
 }

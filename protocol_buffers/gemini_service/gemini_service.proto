@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gemini_service;
+option go_package = "bmwadforth/blog-backend";
+
+service Gemini {
+  rpc QueryGemini(QueryRequest) returns (stream QueryResponse);
+}
+
+message QueryRequest {
+  string query = 1;
+}
+
+message QueryResponse {
+  string response = 1;
+}

@@ -18,10 +18,20 @@ type configuration struct {
 	FireStoreDatabase  string `json:"fireStoreDatabase" env:"WEB_TEMPLATE__FIRESTOREDATABASE"`
 	CloudStorageBucket string `json:"cloudStorageBucket" env:"WEB_TEMPLATE__CLOUDSTORAGEBUCKET"`
 	ContentURL         string `json:"contentURL" env:"WEB_TEMPLATE__CONTENTURL"`
+	GeminiApiKey       string `json:"geminiApiKey" env:"WEB_TEMPLATE__GEMINI_APIKEY"`
 }
 
 func LoadConfiguration() {
-	configFile, err := filepath.Abs("config.json")
+	var configFile string
+	localConfigFile, err := filepath.Abs("config.local.json")
+	defaultConfigFile, err := filepath.Abs("config.json")
+	_, err = os.Stat(localConfigFile)
+	if err == nil {
+		configFile = localConfigFile
+	} else {
+		configFile = defaultConfigFile
+	}
+
 	if err != nil {
 		SLogger.Fatalf("an error has occurred: %v", err)
 	}
