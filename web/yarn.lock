@@ -5278,6 +5278,11 @@
     "merge2" "^1.4.1"
     "slash" "^3.0.0"
 
+"google-protobuf@^3.21.2":
+  "integrity" "sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA=="
+  "resolved" "https://registry.npmjs.org/google-protobuf/-/google-protobuf-3.21.2.tgz"
+  "version" "3.21.2"
+
 "gopd@^1.0.1":
   "integrity" "sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA=="
   "resolved" "https://registry.npmjs.org/gopd/-/gopd-1.0.1.tgz"
@@ -5294,6 +5299,11 @@
   "integrity" "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="
   "resolved" "https://registry.npmjs.org/graphemer/-/graphemer-1.4.0.tgz"
   "version" "1.4.0"
+
+"grpc-web@^1.5.0":
+  "integrity" "sha512-y1tS3BBIoiVSzKTDF3Hm7E8hV2n7YY7pO0Uo7depfWJqKzWE+SKr0jvHNIJsJJYILQlpYShpi/DRJJMbosgDMQ=="
+  "resolved" "https://registry.npmjs.org/grpc-web/-/grpc-web-1.5.0.tgz"
+  "version" "1.5.0"
 
 "gzip-size@^6.0.0":
   "integrity" "sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q=="

@@ -10,10 +10,8 @@ export interface UserStatusResponse {
 export default class UserApiService extends BaseApiService {
 
     public async loginUser(username: string, password: string): Promise<IApiResponse<string>> {
-        const res = await this.client.post<IApiResponse<string>>('/user/login', undefined, {
-            withCredentials: true, params: {
-                username, password
-            }
+        const res = await this.client.post<IApiResponse<string>>('/login', {username, password}, {
+            withCredentials: true
         });
 
         window.localStorage.setItem('token', res.data.data as string);
