@@ -14,7 +14,7 @@ export default abstract class BaseApiService {
             const token = getTokenString();
             if (token !== null){
                 // Ensuring we're not adding authorization header when fetching from CDN.
-                if (config.baseURL === process.env.REACT_APP_API_URL) {
+                if (config.url && !config.url.includes("cdn.bmwadforth.com")) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
             }
