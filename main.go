@@ -93,12 +93,10 @@ func main() {
 		}))
 	} else {
 		r.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"https://bmwadforth.com"},
-			AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
-			AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
-			ExposeHeaders:    []string{"Content-Length"},
-			AllowCredentials: true,
-			MaxAge:           12 * time.Hour,
+			// To modify CORS headers in production, navigate to the GCP Application load balancer
+			// configuration and rewrite the response headers.
+			ExposeHeaders: []string{"Content-Length"},
+			MaxAge:        12 * time.Hour,
 		}))
 	}
 
