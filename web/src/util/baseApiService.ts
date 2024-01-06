@@ -13,7 +13,10 @@ export default abstract class BaseApiService {
         axiosClient.interceptors.request.use(function (config) {
             const token = getTokenString();
             if (token !== null){
-                config.headers.Authorization = `Bearer ${token}`;
+                // Ensuring we're not adding authorization header when fetching from CDN.
+                if (config.baseURL === process.env.REACT_APP_API_URL) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
             }
 
             return config;
