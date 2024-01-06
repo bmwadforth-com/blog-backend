@@ -80,7 +80,7 @@ func main() {
 			staticServer(c)
 		}
 	})
-	
+
 	if !util.IsProduction {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 		r.Use(cors.New(cors.Config{
@@ -109,6 +109,7 @@ func main() {
 	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
 	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
 	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
+	v1BearerAuthenticated.GET("/gemini", controllers.QueryGemini)
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {
