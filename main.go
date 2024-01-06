@@ -91,6 +91,15 @@ func main() {
 			AllowCredentials: true,
 			MaxAge:           12 * time.Hour,
 		}))
+	} else {
+		r.Use(cors.New(cors.Config{
+			AllowOrigins:     []string{"https://bmwadforth.com"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
+			AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+			ExposeHeaders:    []string{"Content-Length"},
+			AllowCredentials: true,
+			MaxAge:           12 * time.Hour,
+		}))
 	}
 
 	v1 := r.Group("/api/v1")
