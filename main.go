@@ -91,13 +91,6 @@ func main() {
 			AllowCredentials: true,
 			MaxAge:           12 * time.Hour,
 		}))
-	} else {
-		r.Use(cors.New(cors.Config{
-			// To modify CORS headers in production, navigate to the GCP Application load balancer
-			// configuration and rewrite the response headers.
-			ExposeHeaders: []string{"Content-Length"},
-			MaxAge:        12 * time.Hour,
-		}))
 	}
 
 	v1 := r.Group("/api/v1")
