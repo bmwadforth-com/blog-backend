@@ -1,5 +1,5 @@
 import {Box} from "@mui/system";
-import {Alert, AlertColor, Button, Snackbar, TextField} from "@mui/material";
+import {Alert, AlertColor, Button, Grid, Snackbar, TextField} from "@mui/material";
 import {useState} from "react";
 import {useRecoilState} from "recoil";
 import {newArticleState} from "../../store/articles/articlesState";
@@ -61,52 +61,54 @@ export default function NewArticle() {
             noValidate
             autoComplete="off"
         >
-            {showAlert.status &&
-                <Snackbar open={!!showAlert.status || false} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert variant="filled" severity={showAlert.status as AlertColor}>
-                        {showAlert.message}
-                    </Alert>
-                </Snackbar>}
+            <Grid container style={{padding: '1em', height: '100%'}}>
+                {showAlert.status &&
+                    <Snackbar open={!!showAlert.status || false} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert variant="filled" severity={showAlert.status as AlertColor}>
+                            {showAlert.message}
+                        </Alert>
+                    </Snackbar>}
 
-            <>
-                <TextField id="title" name='title' label="Title" variant="filled" type="text"
-                           onChange={(e: any) => onChange('title', e.target.value)}/>
-                <TextField id="description" name='description' label="Description" variant="filled" type="text"
-                           onChange={(e: any) => onChange('description', e.target.value)}/>
+                <>
+                    <TextField id="title" name='title' label="Title" variant="filled" type="text"
+                               onChange={(e: any) => onChange('title', e.target.value)}/>
+                    <TextField id="description" name='description' label="Description" variant="filled" type="text"
+                               onChange={(e: any) => onChange('description', e.target.value)}/>
 
-                {article.id === 0 ?
-                    <Button sx={{width: '100%', mt: 2}} variant="contained" type='submit' onClick={onSubmit}>
-                        Create Article
-                    </Button>
-                    :
-                    <>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            sx={{mr: 2}}
-                            disabled={!(form.title && form.description)}
-                        >
-                            Upload Article
-                            <input
-                                type="file"
-                                onChange={(e: any) => onFileUpload('content', e.target.files[0], e.target.files[0].type)}
-                                hidden
-                            />
+                    {article.id === 0 ?
+                        <Button sx={{width: '100%', mt: 2}} variant="contained" type='submit' onClick={onSubmit}>
+                            Create Article
                         </Button>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            disabled={!(form.title && form.description)}
-                        >
-                            Upload Thumbnail
-                            <input
-                                type="file"
-                                onChange={(e: any) => onFileUpload('thumbnail', e.target.files[0], e.target.files[0].type)}
-                                hidden
-                            />
-                        </Button>
-                    </>}
-            </>
+                        :
+                        <>
+                            <Button
+                                variant="contained"
+                                component="label"
+                                sx={{mr: 2}}
+                                disabled={!(form.title && form.description)}
+                            >
+                                Upload Article
+                                <input
+                                    type="file"
+                                    onChange={(e: any) => onFileUpload('content', e.target.files[0], e.target.files[0].type)}
+                                    hidden
+                                />
+                            </Button>
+                            <Button
+                                variant="contained"
+                                component="label"
+                                disabled={!(form.title && form.description)}
+                            >
+                                Upload Thumbnail
+                                <input
+                                    type="file"
+                                    onChange={(e: any) => onFileUpload('thumbnail', e.target.files[0], e.target.files[0].type)}
+                                    hidden
+                                />
+                            </Button>
+                        </>}
+                </>
+            </Grid>
         </Box>
     )
 }

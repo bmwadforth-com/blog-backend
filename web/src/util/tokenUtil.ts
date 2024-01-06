@@ -12,3 +12,12 @@ export function getToken(): TokenData | null {
 
     return null;
 }
+
+export function getTokenString(): string | null {
+    const jwt = window.localStorage.getItem('token');
+    if (jwt) {
+        return jwt;
+    }
+
+    return null;
+}

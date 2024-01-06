@@ -1,5 +1,6 @@
 import {AxiosInstance} from "axios";
 import axios from 'axios';
+import {getToken, getTokenString} from "./tokenUtil";
 
 export default abstract class BaseApiService {
     protected readonly client: AxiosInstance;
@@ -10,6 +11,10 @@ export default abstract class BaseApiService {
 
         // Add a request interceptor
         axiosClient.interceptors.request.use(function (config) {
+            const token = getTokenString();
+            if (token !== null){
+                config.headers.Authorization = `Bearer ${token}`;
+            }
 
             return config;
         }, function (error) {
