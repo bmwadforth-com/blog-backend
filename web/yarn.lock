@@ -1152,10 +1152,10 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
-"@bmwadforth/armor-ui@^0.2.4":
-  "integrity" "sha512-RznuDTxUC9UtYSiObKdB8k2tYK499IyPyc6ByEWZhLG8KjaGkkSZOU7UAd1Ftxzu6+ZDTNwqDD3OFX2jN93pXw=="
-  "resolved" "https://australia-southeast2-npm.pkg.dev/digital-node-1176/bmwadforth-npm/@bmwadforth/armor-ui/-/@bmwadforth/armor-ui-0.2.4.tgz"
-  "version" "0.2.4"
+"@bmwadforth/armor-ui@^0.2.5":
+  "integrity" "sha512-3H4rjevEzMMAg7abBz2jL/ZjdpKDh0+Z5GsNfGLcf2KhGOWUqQglIl6IlCUDtqCx8SenqfvbKgMDR7Ect0y/Wg=="
+  "resolved" "https://australia-southeast2-npm.pkg.dev/digital-node-1176/bmwadforth-npm/@bmwadforth/armor-ui/-/@bmwadforth/armor-ui-0.2.5.tgz"
+  "version" "0.2.5"
 
 "@csstools/normalize.css@*":
   "integrity" "sha512-M0qqxAcwCsIVfpFQSlGN5XjXWu8l5JDZN+fPt1LeW5SZexQTgnaEvgXAY+CeygRw0EeppWHi12JxESWiWrB0Sg=="
