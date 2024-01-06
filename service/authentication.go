@@ -2,8 +2,10 @@ package service
 
 import (
 	"blog-backend/util"
+	"context"
 	"fmt"
 	"github.com/bmwadforth/jwt"
+	"google.golang.org/api/idtoken"
 	"time"
 )
 
@@ -63,4 +65,16 @@ func GetTokenClaims(tokenString string) map[string]interface{} {
 	}
 
 	return token.Claims
+}
+
+func FetchIdentityToken(ctx context.Context, audience string) (string, error) {
+	ts, err := idtoken.NewTokenSource(ctx, audience)
+	if err != nil {
+		return "", err
+	}
+	token, err := ts.Token()
+	if err != nil {
+		return "", err
+	}
+	return token.AccessToken, nil
 }

@@ -2,8 +2,10 @@ package controllers
 
 import (
 	pb "blog-backend/protocol_buffers/gemini_service"
+	"blog-backend/service"
 	"blog-backend/util"
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -17,6 +19,10 @@ import (
 
 func attachAPIKey(ctx context.Context) context.Context {
 	return metadata.AppendToOutgoingContext(ctx, "api-key", util.Config.ApiKey)
+}
+
+func attachTokenToContext(ctx context.Context, token string) context.Context {
+	return metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+token)
 }
 
 // QueryGemini example godoc
@@ -41,7 +47,15 @@ func QueryGemini(c *gin.Context) {
 	defer cancel()
 	ctxWithAPIKey := attachAPIKey(ctx)
 
-	r, err := client.QueryGemini(ctxWithAPIKey, &pb.QueryRequest{Query: c.Query("query")})
+	token, err := service.FetchIdentityToken(ctxWithAPIKey, fmt.Sprintf("https://%s", strings.Replace(util.Config.GeminiService, ":443", "", 1)))
+	if err != nil {
+		response := util.NewResponse(http.StatusInternalServerError, err.Error(), "", nil)
+		c.JSON(response.GetStatusCode(), response)
+		return
+	}
+	ctxWithIDToken := attachTokenToContext(ctxWithAPIKey, token)
+
+	r, err := client.QueryGemini(ctxWithIDToken, &pb.QueryRequest{Query: c.Query("query")})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
