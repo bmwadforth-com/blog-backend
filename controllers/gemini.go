@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 	"io"
 	"log"
@@ -28,7 +29,7 @@ func attachAPIKey(ctx context.Context) context.Context {
 // @Success 200 {object}  util.ApiResponse[string]
 // @Router /gemini [get]
 func QueryGemini(c *gin.Context) {
-	conn, err := grpc.Dial(util.Config.GeminiService, grpc.WithInsecure())
+	conn, err := grpc.Dial(util.Config.GeminiService, grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
