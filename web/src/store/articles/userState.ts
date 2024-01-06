@@ -1,6 +1,4 @@
-import {atom, selector, selectorFamily} from 'recoil';
-import {IApiResponse} from '../base';
-import ArticleApiService from "../../util/articleApiService";
+import {atom, selector} from 'recoil';
 import UserApiService from "../../util/userApiService";
 import {getToken} from "../../util/tokenUtil";
 
@@ -21,7 +19,7 @@ export const userStateSelector = selector<IUSerState>({
             if (tokenData) {
                 const apiService = new UserApiService();
                 const data = await apiService.userStatus();
-                if (data.data?.token as string === window.localStorage.getItem('token')) {
+                if (data.data?.active) {
                     return { username:  data.data?.userName as string, loggedInSince: new Date(data.data?.loggedInSince as string) as Date, isLoggedIn: true }
                 }
             }

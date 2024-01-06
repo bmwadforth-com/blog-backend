@@ -37,3 +37,11 @@ type LoginUserRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+// UserStatusModel User status model
+// @Description User status model
+type UserStatusModel struct {
+	Username      string `json:"username"`
+	Active        bool   `json:"active"`
+	LoggedInSince string `json:"loggedInSince"`
+}

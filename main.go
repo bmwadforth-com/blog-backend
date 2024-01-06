@@ -110,6 +110,7 @@ func main() {
 	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
 	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
 	v1BearerAuthenticated.GET("/gemini", controllers.QueryGemini)
+	v1BearerAuthenticated.GET("/status", controllers.GetStatus)
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {

@@ -3,7 +3,7 @@ import {IApiResponse} from "../store/base";
 
 export interface UserStatusResponse {
     userName: string;
-    token: string;
+    active: boolean;
     loggedInSince: string;
 }
 
@@ -19,7 +19,7 @@ export default class UserApiService extends BaseApiService {
     }
 
     public async userStatus(): Promise<IApiResponse<UserStatusResponse>> {
-        const res = await this.client.get<IApiResponse<UserStatusResponse>>('/user/status', {
+        const res = await this.client.get<IApiResponse<UserStatusResponse>>('/status', {
             withCredentials: true
         });
 

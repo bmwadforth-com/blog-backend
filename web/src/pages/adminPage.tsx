@@ -6,9 +6,9 @@ import NewArticle from "../components/admin/newArticle";
 import Gemini from "../components/admin/gemini";
 
 export default function AdminPage() {
-    //const user = useRecoilValue(userStateSelector);
+    const user = useRecoilValue(userStateSelector);
 
-    //TODO: fix this if (!user.isLoggedIn) return <Navigate to='/login' />;
+    if (!user.isLoggedIn) return <Navigate to='/login' />;
 
     return (
         <Box>

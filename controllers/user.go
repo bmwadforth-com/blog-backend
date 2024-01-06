@@ -81,3 +81,32 @@ func GetSessions(c *gin.Context) {
 	response := util.NewResponse(http.StatusOK, "Successful", sessions, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
+
+// GetStatus example godoc
+// @Summary Get user status
+// @Schemes
+// @Description Get user status
+// @Tags Get user status
+// @Accept json
+// @Produce json
+// @Success 200 {object}  util.ApiResponse[models.UserStatusModel]
+// @Router /status [get]
+func GetStatus(c *gin.Context) {
+	bearer, err := util.GetBearerToken(c.Request)
+	if err != nil {
+		response := util.NewResponse(http.StatusUnauthorized, "invalid authentication", "", nil)
+		c.AbortWithStatusJSON(response.GetStatusCode(), response)
+		return
+	}
+
+	claims := service.GetTokenClaims(bearer)
+	session := service.Sessions[claims["sub"].(string)]
+	r := models.UserStatusModel{
+		Username:      session.Username,
+		Active:        session.Active,
+		LoggedInSince: session.LoggedIn.String(),
+	}
+
+	response := util.NewResponse(http.StatusOK, "Successful", r, nil)
+	c.JSON(response.GetStatusCode(), response)
+}
