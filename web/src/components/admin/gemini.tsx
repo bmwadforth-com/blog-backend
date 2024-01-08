@@ -21,10 +21,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import moment from "moment";
 import {Code} from "@bmwadforth/armor-ui";
 
+interface GeminiDataEntry {
+    Query: string,
+    Response: string
+}
+
 export default function Gemini() {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
-    const [geminiData, setGeminiData] = useState('');
+    const [geminiData, setGeminiData] = useState<Array<GeminiDataEntry>>([]);
     const [showAlert, setShowAlert] = useState({status: '', message: ''});
     const onChange = (val: string) => setQuery(val);
 
@@ -35,18 +40,26 @@ export default function Gemini() {
             setLoading(true);
             const response = await apiService.queryGemini(query);
             setLoading(false);
-            setGeminiData(response);
+            setGeminiData([...geminiData, {Query: query, Response: response}]);
             setShowAlert({status: 'success', message: 'Successfully queried gemini'});
         } catch (e) {
             setLoading(false);
-            setGeminiData('');
             setShowAlert({status: 'error', message: 'Failed to query gemini'});
         }
     }
     const handleClose = () => setShowAlert({status: '', message: ''});
+    const getGeminiData = (): string => {
+        const gData = geminiData.map(g => g);
+        const data: string[] = [];
+
+        gData.forEach(g => {
+            data.push(`Prompt: ${g.Query}\n\n${g.Response}`);
+        });
+
+        return data.reverse().join('\n___\n');
+    }
 
     return (
-
         <Box
             component="form"
             sx={{
@@ -71,7 +84,7 @@ export default function Gemini() {
                 </Grid>
                 <Divider/>
                 <Grid item xs={12}>
-                    {loading ? <LinearProgress /> : <Code data={geminiData.toString()} showLineNumbers />}
+                    {loading ? <LinearProgress /> : <Code data={getGeminiData()} showLineNumbers />}
                 </Grid>
             </Grid>
         </Box>

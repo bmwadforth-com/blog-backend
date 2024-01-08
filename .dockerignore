@@ -1,3 +1,5 @@
 /web/node_modules
 .gitignore
 README.md
+config.local.json
+config.json

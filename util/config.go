@@ -22,7 +22,15 @@ type configuration struct {
 }
 
 func LoadConfiguration() {
-	configFile, err := filepath.Abs("config.json")
+	var configFile string
+	localConfigFile, err := filepath.Abs("config.local.json")
+	defaultConfigFile, err := filepath.Abs("config.json")
+	_, err = os.Stat(localConfigFile)
+	if err == nil {
+		configFile = localConfigFile
+	} else {
+		configFile = defaultConfigFile
+	}
 	if err != nil {
 		SLogger.Fatalf("an error has occurred: %v", err)
 	}
