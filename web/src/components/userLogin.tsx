@@ -41,7 +41,6 @@ export default function UserLogin() {
                 '& .MuiTextField-root': { width: '100%', my: 2 },
             }}
             noValidate
-            autoComplete="off"
         >
             {showAlert.status &&
                 <Snackbar open={!!showAlert.status || false} autoHideDuration={6000} onClose={handleClose}>

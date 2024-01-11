@@ -77,7 +77,7 @@ export default function Gemini() {
                     </Snackbar>}
                 <Grid item xs={12}>
                     <TextField id="query" name='query' label="Gemini Query" variant="filled" type="text"
-                               onChange={(e: any) => onChange(e.target.value)} autoComplete='on'/>
+                               onChange={(e: any) => onChange(e.target.value)}/>
                     <Button sx={{width: '100%', mt: 2}} variant="contained" type='submit' onClick={onSubmit} disabled={loading}>
                         Submit
                     </Button>
