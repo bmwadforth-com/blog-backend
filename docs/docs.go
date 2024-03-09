@@ -136,6 +136,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/gemini": {
+            "get": {
+                "description": "Query gemini",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Query gemini"
+                ],
+                "summary": "Query gemini via gRPC",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse-string"
+                        }
+                    }
+                }
+            }
+        },
         "/healthz": {
             "get": {
                 "description": "HealthCheck",
@@ -231,6 +254,29 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/util.ApiResponse-models_UserSessionModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/status": {
+            "get": {
+                "description": "Get user status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Get user status"
+                ],
+                "summary": "Get user status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse-models_UserStatusModel"
                         }
                     }
                 }
@@ -375,6 +421,21 @@ const docTemplate = `{
                 }
             }
         },
+        "models.UserStatusModel": {
+            "description": "User status model",
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "loggedInSince": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "util.ApiResponse-array_models_ArticleModel": {
             "type": "object",
             "properties": {
@@ -439,6 +500,20 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/models.UserSessionModel"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "util.ApiResponse-models_UserStatusModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.UserStatusModel"
                 },
                 "error": {
                     "type": "string"
