@@ -12,8 +12,8 @@ export interface IArticle {
     title: string;
     description: string;
     slug: string;
-    createdDate: Date;
-    updatedDate: Date;
+    created: Date;
+    updated: Date;
     thumbnailUrl: string;
     contentUrl: string;
     content?: string;
