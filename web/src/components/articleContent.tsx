@@ -34,7 +34,7 @@ export default function ArticleContent() {
                             </IconButton>
                         </Typography>
                         <Typography
-                            variant="subtitle1">{`${payload.title} - ${moment(payload.createdDate).format('LLL')}`}</Typography>
+                            variant="subtitle1">{`${payload.title} - ${moment(payload.updatedDate).format('LLL')}`}</Typography>
                     </Stack>
                 </Grid>
                 <Divider/>
