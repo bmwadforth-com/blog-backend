@@ -5,6 +5,24 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {RecoilRoot} from 'recoil';
 import {BrowserRouter} from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getAnalytics, logEvent } from "firebase/analytics";
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyDU6p63BqTP0FIHqVXpxY4ytrwY6-AXPoE",
+    authDomain: "digital-node-1176.firebaseapp.com",
+    projectId: "digital-node-1176",
+    storageBucket: "digital-node-1176.appspot.com",
+    messagingSenderId: "416443939101",
+    appId: "1:416443939101:web:e75dc69b02d92040a149f4",
+    measurementId: "G-EK6VC80EVT"
+};
+
+const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
+logEvent(analytics, 'notification_received');
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

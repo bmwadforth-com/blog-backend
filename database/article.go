@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+type OrderByOption string
+
+const (
+	OrderByUpdated OrderByOption = "updated"
+	OrderByCreated OrderByOption = "created"
+)
+
 func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	var article models.ArticleModel
 	dataResponse := util.NewDataResponse("success", article)
@@ -80,14 +87,21 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 	return dataResponse
 }
 
-func GetArticles() util.DataResponse[[]models.ArticleModel] {
+func GetArticles(orderBy OrderByOption) util.DataResponse[[]models.ArticleModel] {
+	if orderBy == "" {
+		orderBy = "updated" // Default ordering
+	}
+
 	var articles []models.ArticleModel
 	dataResponse := util.NewDataResponse("successfully read articles", articles)
 	ctx := context.Background()
 	client, _ := createClient(ctx)
 	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("published", "==", true).Documents(ctx).GetAll()
+	query := client.Collection("articles").Where("published", "==", true)
+	query = query.OrderBy(string(orderBy), firestore.Desc)
+
+	docs, err := query.Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse

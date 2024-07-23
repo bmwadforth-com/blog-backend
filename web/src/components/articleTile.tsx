@@ -24,7 +24,7 @@ export default function ArticleTile({article}: IArticleTileProps) {
                   {article.title}
               </Typography>
               <Typography gutterBottom variant="subtitle1" color="text.secondary" component="div">
-                  {`${moment(article.updatedDate).format('LLL')}`}
+                  {`${moment(article.updated).format('LLL')}`}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                   {article.description}

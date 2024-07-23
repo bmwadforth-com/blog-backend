@@ -8,6 +8,8 @@ import Loading from "./loading";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {ApplicationRoutes} from "../App";
 import {Code} from "@bmwadforth/armor-ui";
+import {analytics} from "../index";
+import {logEvent} from "firebase/analytics";
 
 export interface IArticleTileProps {
     article: IArticle;
@@ -21,6 +23,10 @@ export default function ArticleContent() {
     if (loading) return <Loading/>;
     if (payload?.content === undefined) return <h1>Error</h1>;
 
+    logEvent(analytics, 'select_content', {
+        content_type: 'article',
+        content_id: article.data?.articleId
+    });
 
     return (
         <Paper>
@@ -34,7 +40,7 @@ export default function ArticleContent() {
                             </IconButton>
                         </Typography>
                         <Typography
-                            variant="subtitle1">{`${payload.title} - ${moment(payload.updatedDate).format('LLL')}`}</Typography>
+                            variant="subtitle1">{`${payload.title} - ${moment(payload.updated).format('LLL')}`}</Typography>
                     </Stack>
                 </Grid>
                 <Divider/>

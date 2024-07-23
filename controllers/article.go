@@ -49,7 +49,7 @@ func CreateArticle(c *gin.Context) {
 // @Success 200 {object}  util.ApiResponse[[]models.ArticleModel]
 // @Router /articles [get]
 func GetArticles(c *gin.Context) {
-	r := database.GetArticles()
+	r := database.GetArticles(database.OrderByUpdated)
 	if r.GetError() != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
 		c.JSON(response.GetStatusCode(), response)
