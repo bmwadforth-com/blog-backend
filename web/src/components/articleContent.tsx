@@ -30,28 +30,28 @@ export default function ArticleContent() {
     });
 
     return (
-        <Helmet>
-            <title>bmwadforth.com | Article - {article.data?.title}</title>
-            <Paper>
-                <Grid container style={{padding: '1em', height: '100%'}}>
-                    <Grid item xs={12}>
-                        <Stack direction="row" display='flex' alignItems={'center'} spacing={2}>
-                            <Typography
-                                variant="subtitle1">
-                                <IconButton aria-label="delete" onClick={() => navigate(ApplicationRoutes.ARTICLES)}>
-                                    <ArrowBackIcon/>
-                                </IconButton>
-                            </Typography>
-                            <Typography
-                                variant="subtitle1">{`${payload.title} - ${moment(payload.updated).format('LLL')}`}</Typography>
-                        </Stack>
-                    </Grid>
-                    <Divider/>
-                    <Grid item xs={12}>
-                        <Code data={payload.content} showLineNumbers/>
-                    </Grid>
+        <Paper>
+            <Helmet>
+                <title>bmwadforth.com | Article - {article.data?.title}</title>
+            </Helmet>
+            <Grid container style={{padding: '1em', height: '100%'}}>
+                <Grid item xs={12}>
+                    <Stack direction="row" display='flex' alignItems={'center'} spacing={2}>
+                        <Typography
+                            variant="subtitle1">
+                            <IconButton aria-label="delete" onClick={() => navigate(ApplicationRoutes.ARTICLES)}>
+                                <ArrowBackIcon/>
+                            </IconButton>
+                        </Typography>
+                        <Typography
+                            variant="subtitle1">{`${payload.title} - ${moment(payload.updated).format('LLL')}`}</Typography>
+                    </Stack>
                 </Grid>
-            </Paper>
-        </Helmet>
+                <Divider/>
+                <Grid item xs={12}>
+                    <Code data={payload.content} showLineNumbers/>
+                </Grid>
+            </Grid>
+        </Paper>
     )
 }
