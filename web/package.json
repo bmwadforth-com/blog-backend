@@ -24,6 +24,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-ga": "^3.3.1",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "reactstrap": "^9.2.0",
@@ -57,5 +58,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-helmet": "^6.1.11"
   }
 }
