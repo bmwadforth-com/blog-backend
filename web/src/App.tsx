@@ -2,14 +2,13 @@ import React, {Suspense} from 'react';
 import {
     Container,
     Paper,
-    Box,
     createTheme,
     ThemeProvider,
-    useMediaQuery, BottomNavigation, BottomNavigationAction, MenuItem, Menu
+    useMediaQuery, BottomNavigation, BottomNavigationAction, Tooltip
 } from '@mui/material';
 import {
     createBrowserRouter, createRoutesFromElements,
-    Route, RouterProvider, ScrollRestoration
+    Route, RouterProvider
 } from "react-router-dom";
 import ArticlesPage from "./pages/articles/articles";
 import ArticleViewPage from "./pages/articles/articleView";
@@ -25,7 +24,6 @@ import userState from "./store/articles/userState";
 import LoginPage from "./pages/loginPage";
 import {Spinner} from "reactstrap";
 import ReactGA from 'react-ga';
-import ErrorPage from "./pages/errorPage";
 
 const TRACKING_ID = "UA-178141115-1";
 ReactGA.initialize(TRACKING_ID);
@@ -91,12 +89,15 @@ function App() {
             </Paper>
             
             <BottomNavigation
+                sx={{ padding: 2 }}
                 showLabels
             >
-                <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />}
-                    onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
-                <BottomNavigationAction label="GitHub" icon={<GitHub />}
-                    onClick={() => window.open('https://github.com/bmwadforth')} />
+                <Tooltip title="Connect on LinkedIn">
+                    <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />} onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
+                </Tooltip>
+                <Tooltip title="Connect on GitHub">
+                    <BottomNavigationAction label="GitHub" icon={<GitHub />} onClick={() => window.open('https://github.com/bmwadforth')} />
+                </Tooltip>
             </BottomNavigation>
         </ThemeProvider>
     );
