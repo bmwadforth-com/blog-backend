@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {RecoilRoot} from 'recoil';
-import {BrowserRouter, ScrollRestoration} from "react-router-dom";
+import { RecoilRoot } from 'recoil';
 import { initializeApp } from "firebase/app";
 import { getAnalytics, logEvent } from "firebase/analytics";
 
@@ -30,10 +29,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <RecoilRoot>
-            <BrowserRouter>
-                <ScrollRestoration />
-                <App />
-            </BrowserRouter>
+            <App />
         </RecoilRoot>
     </React.StrictMode>
 );

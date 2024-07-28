@@ -2,15 +2,13 @@ import React, {Suspense} from 'react';
 import {
     Container,
     Paper,
-    Box,
     createTheme,
     ThemeProvider,
-    useMediaQuery, BottomNavigation, BottomNavigationAction, MenuItem, Menu
+    useMediaQuery, BottomNavigation, BottomNavigationAction, Tooltip
 } from '@mui/material';
 import {
-    Route,
-    Routes,
-    useLocation, useNavigate
+    createBrowserRouter, createRoutesFromElements,
+    Route, RouterProvider
 } from "react-router-dom";
 import ArticlesPage from "./pages/articles/articles";
 import ArticleViewPage from "./pages/articles/articleView";
@@ -34,24 +32,14 @@ export const ApplicationRoutes = {
     INDEX: '/',
     ARTICLES: '/articles',
     ARTICLE: '/article/:articleSlug',
-    PROJECTS: 'projects',
+    PROJECTS: '/projects',
     ABOUT: '/about',
     ADMIN: '/admin',
     LOGIN: '/login'
 }
 
-function HomeComponent() {
-    return (
-        <Box>
-            <h1>Home</h1>
-        </Box>
-    )
-}
-
-
 function App() {
     const user = useRecoilValue(userState);
-    const navigate = useNavigate();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
     const theme = React.useMemo(
@@ -64,15 +52,23 @@ function App() {
             }),
         [prefersDarkMode],
     );
-    const { pathname } = useLocation();
 
-    const isActive = (path: string): string => {
-        if (pathname === path) {
-            return 'text.primary';
-        } else {
-            return 'text.secondary';
-        }
-    }
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route path={ApplicationRoutes.INDEX} element={<ArticlesPage />} />
+                <Route path={ApplicationRoutes.ARTICLES} element={<ArticlesPage />} />
+                <Route path={ApplicationRoutes.ARTICLE} element={<ArticleViewPage />} />
+                <Route path={ApplicationRoutes.ADMIN} element={
+                    <Suspense fallback={<Spinner />}><AdminPage /></Suspense>
+                } />
+                <Route path={ApplicationRoutes.LOGIN} element={
+                    <Suspense fallback={<Spinner />}><LoginPage /></Suspense>
+                } />
+                <Route path="*" element={<NotFoundPage />} />
+            </>
+        )
+    );
 
     return (
         <ThemeProvider theme={theme}>
@@ -87,25 +83,21 @@ function App() {
             <Paper id="content" square elevation={6} style={{ padding: '50px 0' }}>
                 <Container>
                     <ErrorBoundary>
-                        <Routes>
-                            <Route path={ApplicationRoutes.INDEX} element={<ArticlesPage />} />
-                            <Route path={ApplicationRoutes.ARTICLES} element={<ArticlesPage />} />
-                            <Route path={ApplicationRoutes.ARTICLE} element={<ArticleViewPage />} />
-                            <Route path={ApplicationRoutes.ADMIN} element={<Suspense fallback={<Spinner />}><AdminPage /></Suspense>} />
-                            <Route path={ApplicationRoutes.LOGIN} element={<Suspense fallback={<Spinner />}><LoginPage /></Suspense>} />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
+                        <RouterProvider router={router} />
                     </ErrorBoundary>
                 </Container>
             </Paper>
             
             <BottomNavigation
+                sx={{ padding: 2 }}
                 showLabels
             >
-                <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />}
-                    onClick={() => window.location.replace('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
-                <BottomNavigationAction label="GitHub" icon={<GitHub />}
-                    onClick={() => window.location.replace('https://github.com/bmwadforth')} />
+                <Tooltip title="Connect on LinkedIn">
+                    <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />} onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
+                </Tooltip>
+                <Tooltip title="Connect on GitHub">
+                    <BottomNavigationAction label="GitHub" icon={<GitHub />} onClick={() => window.open('https://github.com/bmwadforth')} />
+                </Tooltip>
             </BottomNavigation>
         </ThemeProvider>
     );
