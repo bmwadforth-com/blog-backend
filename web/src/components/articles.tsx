@@ -1,6 +1,6 @@
 import React from 'react';
 import { IArticle } from '../store/articles/articlesState';
-import {Box, useTheme, useMediaQuery} from '@mui/material';
+import {Box, useTheme, useMediaQuery, Divider, Typography} from '@mui/material';
 import { Masonry } from '@mui/lab';
 import ArticleTile from './articleTile';
 import useArticles from "../hooks/useArticles";
@@ -16,10 +16,10 @@ export default function Articles() {
     if (payload === undefined) return <h1>Error</h1>
 
     return (
-        <Box sx={{ width: '100%'}}>
+        <Box sx={{width: '100%'}}>
             <Masonry columns={isMobile ? 1 : 2} spacing={2}>
                 {payload.map((article: IArticle, index: number) => (
-                    <ArticleTile key={index} article={article} />
+                    <ArticleTile key={index} article={article}/>
                 ))}
             </Masonry>
         </Box>
