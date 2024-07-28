@@ -11,7 +11,7 @@ This repository is for the application deployed at `bmwadforth.com`.
 7. If you want to use the [makefile](Makefile) to **generate the latest swagger specification**, **build the backend**, **build the frontend** and **start the application** you can simply run `make build_all`.
 8. Otherwise, simply run `go start main.go` in one CLI shell to start the backend, and in another CLI shell navigate to the [web](web) directory and run `npm run start`.
 
-If you run `make build_all` make will build the frontend which will output its artifacts [here](./web/build). The makefile will then embed those build artifacts into the go binary using [embed](https://pkg.go.dev/embed). This is how the application is deployed - the frontend react application is actually embedded into the Go binary on the web server in GCP and the go application statically serves these files. 
+If you run `make build_all_start` make will build the frontend which will output its artifacts [here](./web/build). The makefile will then embed those build artifacts into the go binary using [embed](https://pkg.go.dev/embed). This is how the application is deployed - the frontend react application is embedded into the Go binary on the web server in GCP and the go application statically serves these files. 
 
 # Deployment
 When you merge into the `main` branch - [Cloud build](https://cloud.google.com/build?hl=en) will pull the changes and build a docker image based on the dockerfile defined [here](./Dockerfile). Cloud build will then deploy the service into [Cloud run](https://cloud.google.com/run?hl=en).
