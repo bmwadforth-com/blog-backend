@@ -8,9 +8,8 @@ import {
     useMediaQuery, BottomNavigation, BottomNavigationAction, MenuItem, Menu
 } from '@mui/material';
 import {
-    Route,
-    Routes,
-    useLocation, useNavigate
+    createBrowserRouter, createRoutesFromElements,
+    Route, RouterProvider, ScrollRestoration
 } from "react-router-dom";
 import ArticlesPage from "./pages/articles/articles";
 import ArticleViewPage from "./pages/articles/articleView";
@@ -26,6 +25,7 @@ import userState from "./store/articles/userState";
 import LoginPage from "./pages/loginPage";
 import {Spinner} from "reactstrap";
 import ReactGA from 'react-ga';
+import ErrorPage from "./pages/errorPage";
 
 const TRACKING_ID = "UA-178141115-1";
 ReactGA.initialize(TRACKING_ID);
@@ -34,24 +34,14 @@ export const ApplicationRoutes = {
     INDEX: '/',
     ARTICLES: '/articles',
     ARTICLE: '/article/:articleSlug',
-    PROJECTS: 'projects',
+    PROJECTS: '/projects',
     ABOUT: '/about',
     ADMIN: '/admin',
     LOGIN: '/login'
 }
 
-function HomeComponent() {
-    return (
-        <Box>
-            <h1>Home</h1>
-        </Box>
-    )
-}
-
-
 function App() {
     const user = useRecoilValue(userState);
-    const navigate = useNavigate();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
     const theme = React.useMemo(
@@ -64,15 +54,23 @@ function App() {
             }),
         [prefersDarkMode],
     );
-    const { pathname } = useLocation();
 
-    const isActive = (path: string): string => {
-        if (pathname === path) {
-            return 'text.primary';
-        } else {
-            return 'text.secondary';
-        }
-    }
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route path={ApplicationRoutes.INDEX} element={<ArticlesPage />} />
+                <Route path={ApplicationRoutes.ARTICLES} element={<ArticlesPage />} />
+                <Route path={ApplicationRoutes.ARTICLE} element={<ArticleViewPage />} />
+                <Route path={ApplicationRoutes.ADMIN} element={
+                    <Suspense fallback={<Spinner />}><AdminPage /></Suspense>
+                } />
+                <Route path={ApplicationRoutes.LOGIN} element={
+                    <Suspense fallback={<Spinner />}><LoginPage /></Suspense>
+                } />
+                <Route path="*" element={<NotFoundPage />} />
+            </>
+        )
+    );
 
     return (
         <ThemeProvider theme={theme}>
@@ -87,14 +85,7 @@ function App() {
             <Paper id="content" square elevation={6} style={{ padding: '50px 0' }}>
                 <Container>
                     <ErrorBoundary>
-                        <Routes>
-                            <Route path={ApplicationRoutes.INDEX} element={<ArticlesPage />} />
-                            <Route path={ApplicationRoutes.ARTICLES} element={<ArticlesPage />} />
-                            <Route path={ApplicationRoutes.ARTICLE} element={<ArticleViewPage />} />
-                            <Route path={ApplicationRoutes.ADMIN} element={<Suspense fallback={<Spinner />}><AdminPage /></Suspense>} />
-                            <Route path={ApplicationRoutes.LOGIN} element={<Suspense fallback={<Spinner />}><LoginPage /></Suspense>} />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
+                        <RouterProvider router={router} />
                     </ErrorBoundary>
                 </Container>
             </Paper>
