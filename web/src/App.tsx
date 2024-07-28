@@ -94,9 +94,9 @@ function App() {
                 showLabels
             >
                 <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />}
-                    onClick={() => window.location.replace('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
+                    onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
                 <BottomNavigationAction label="GitHub" icon={<GitHub />}
-                    onClick={() => window.location.replace('https://github.com/bmwadforth')} />
+                    onClick={() => window.open('https://github.com/bmwadforth')} />
             </BottomNavigation>
         </ThemeProvider>
     );
