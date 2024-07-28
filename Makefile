@@ -8,6 +8,11 @@ backend_start:
 	go run main.go
 
 frontend_build:
-	cd ./web && npm run artifactregistry-login && npm install && npm run build && cd ..
+	npm --prefix ./web run artifactregistry-login && npm --prefix ./web install && npm --prefix ./web run build
 
-build_all: frontend_build swagger backend_build backend_start
+frontend_start:
+	npm --prefix ./web start
+
+build_all: frontend_build swagger backend_build
+
+build_all_start: frontend_build swagger backend_build backend_start
