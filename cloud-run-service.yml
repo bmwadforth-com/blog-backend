@@ -69,3 +69,9 @@ spec:
   traffic:
     - percent: 100
       latestRevision: true
+status:
+  observedGeneration: 78
+  traffic:
+    - revisionName: blog-backend-COMMIT_SHA
+      percent: 100
+      latestRevision: true
