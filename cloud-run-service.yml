@@ -1,0 +1,62 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: blog-backend-2
+  generation: 78
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '10'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 485.0.0
+        run.googleapis.com/startup-cpu-boost: 'true'
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: bmwadforth-dev@digital-node-1176.iam.gserviceaccount.com
+      containers:
+        - name: blog-backend-1
+          image: ${GAR_IMAGE}
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: WEB_TEMPLATE__PROJECTID
+              value: digital-node-1176
+            - name: WEB_TEMPLATE__FIRESTOREDATABASE
+              value: bmwadforth-production
+            - name: WEB_TEMPLATE__CLOUDSTORAGEBUCKET
+              value: bmwadforth
+            - name: WEB_TEMPLATE__CONTENTURL
+              value: https://cdn.bmwadforth.com
+            - name: WEB_TEMPLATE__GEMINISERVICE
+              value: gemini-n6b4oskuua-ts.a.run.app:443
+            - name: WEB_TEMPLATE__JWTSIGNINGKEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: WEB_TEMPLATE__JWTSIGNINGKEY
+            - name: WEB_TEMPLATE__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: WEB_TEMPLATE__APIKEY
+            - name: WEB_TEMPLATE__GEMINI_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: WEB_TEMPLATE__GEMINI_APIKEY
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+          startupProbe:
+            timeoutSeconds: 240
+            periodSeconds: 240
+            failureThreshold: 1
+            tcpSocket:
+              port: 8080
+  traffic:
+    - percent: 100
+      latestRevision: true
