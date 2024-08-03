@@ -1159,10 +1159,10 @@
   dependencies:
     recoil "^0.7.7"
 
-"@bmwadforth/armor-ui@^0.2.5":
-  version "0.2.5"
-  resolved "https://australia-southeast2-npm.pkg.dev/digital-node-1176/bmwadforth-npm/@bmwadforth/armor-ui/-/@bmwadforth/armor-ui-0.2.5.tgz"
-  integrity sha512-3H4rjevEzMMAg7abBz2jL/ZjdpKDh0+Z5GsNfGLcf2KhGOWUqQglIl6IlCUDtqCx8SenqfvbKgMDR7Ect0y/Wg==
+"@bmwadforth-com/armor-ui@^0.9.1":
+  version "0.9.1"
+  resolved "https://npm.pkg.github.com/download/@bmwadforth-com/armor-ui/0.9.1/9d893f2756be34a2b500c8bb2954b61a42d6d2e8"
+  integrity sha512-NU3cEmwjajljypDqJJP3Igy3sPMz4xZfUMiuUiUQcVKOmjnTiNq85EohsAfVVTlGpvdsukVINDS/NCOPntdDLg==
 
 "@csstools/normalize.css@*":
   version "12.0.0"
