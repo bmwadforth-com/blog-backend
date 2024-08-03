@@ -1,6 +1,8 @@
 # Build frontend
 FROM node:18 as frontend-build
 
+ARG NODE_AUTH_TOKEN
+ENV NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN
 WORKDIR /app
 COPY ./web .
 RUN npm install --legacy-peer-deps
