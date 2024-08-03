@@ -46,3 +46,9 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+      - name: Deploy to Cloud Run
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: blog-backend-alpha
+          image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+          region: australia-southeast1
