@@ -3,6 +3,15 @@ kind: Service
 metadata:
   name: blog-backend-2
   generation: 78
+  labels:
+    commit-sha: COMMIT_SHA
+    cloud.googleapis.com/location: australia-southeast1
+  annotations:
+    serving.knative.dev/creator: brannonwadforth@gmail.com
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/client-version: 485.0.0
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+    run.googleapis.com/ingress-status: internal-and-cloud-load-balancing
 spec:
   template:
     metadata:
