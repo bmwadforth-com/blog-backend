@@ -21,7 +21,7 @@ jobs:
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@bmwadforth-com'
-          working-directory: './web'
+          cache-dependency-path: '**/package-lock.json'
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v2
