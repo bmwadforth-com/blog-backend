@@ -1,0 +1,21 @@
+name: Build and Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+      - name: Push the Docker image
+        run: docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
