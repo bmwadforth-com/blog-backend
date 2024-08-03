@@ -61,7 +61,7 @@ jobs:
 
       - name: Replace Service Variables
         run: |
-          sed -i'' -e 's|GAR_IMAGE|${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest|g' cloud-run-service.yml
+          sed -i 's|GAR_IMAGE|${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest|g' cloud-run-service.yml
 
       - name: Deploy to Cloud Run
         id: deploy
