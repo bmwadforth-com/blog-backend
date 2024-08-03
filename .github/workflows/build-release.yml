@@ -41,8 +41,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Docker image
-        run: docker build --build-arg NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} . --file Dockerfile --tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest --tag australia-southeast2-docker.pkg.dev/digital-node-1176/bmwadforth-docker/${{ github.event.repository.name }}:latest
+        run: docker build --build-arg NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} . --file Dockerfile --tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest --tag gcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
       - name: Push the Docker to GitHub
         run: docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
       - name: Push the Docker to GCP
-        run: docker push australia-southeast2-docker.pkg.dev/digital-node-1176/bmwadforth-docker/${{ github.event.repository.name }}:latest
+        run: docker push gcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
