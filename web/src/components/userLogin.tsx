@@ -5,7 +5,7 @@ import UserApiService from "../util/userApiService";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import userState from "../store/articles/userState";
-import { BoxAlignment, Group, InputType, TextField, Button, ColourType } from "@bmwadforth/armor-ui";
+import { BoxAlignment, Group, InputType, TextField, Button, ColourType } from "@bmwadforth-com/armor-ui";
 import '../styles/userLogin.scss';
 
 export default function UserLogin() {

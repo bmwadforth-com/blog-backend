@@ -19,7 +19,7 @@ import AdminApiService from "../../util/adminApiService";
 import {ApplicationRoutes} from "../../App";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import moment from "moment";
-import {Code} from "@bmwadforth/armor-ui";
+import {Code} from "@bmwadforth-com/armor-ui";
 
 interface GeminiDataEntry {
     Query: string,

@@ -3,7 +3,6 @@ FROM node:18 as frontend-build
 
 WORKDIR /app
 COPY ./web .
-RUN npm run artifactregistry-login
 RUN npm install
 RUN npm run build
 

@@ -7,7 +7,7 @@ import moment from 'moment';
 import Loading from "./loading";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {ApplicationRoutes} from "../App";
-import {Code} from "@bmwadforth/armor-ui";
+import {Code} from "@bmwadforth-com/armor-ui";
 import {analytics} from "../index";
 import {logEvent} from "firebase/analytics";
 import {Helmet} from "react-helmet";
