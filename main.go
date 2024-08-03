@@ -77,7 +77,6 @@ func main() {
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 
-	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	r.Use(gin.Recovery())
 	r.Use(staticServer)
 	r.NoRoute(func(c *gin.Context) {
@@ -102,6 +101,7 @@ func main() {
 	}
 
 	v1 := r.Group("/api/v1")
+	v1.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	v1.GET("/ping", controllers.Ping)
 	v1.GET("/healthz", controllers.HealthCheck)
 	v1.GET("/articles", controllers.GetArticles)
