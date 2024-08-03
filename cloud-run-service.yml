@@ -64,6 +64,4 @@ spec:
               port: 8080
   traffic:
     - percent: 100
-      latestRevision: true
-    - percent: 100
       revisionName: blog-backend-2-COMMIT_SHA
