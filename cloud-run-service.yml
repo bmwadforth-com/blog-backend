@@ -70,6 +70,6 @@ spec:
     - percent: 100
       latestRevision: true
     - percent: 100
-      revisionName: blog-backend-COMMIT_SHA
+      revisionName: blog-backend-2-COMMIT_SHA
     - tag: blog-backend-COMMIT_SHA
-      revisionName: blog-backend-COMMIT_SHA
+      revisionName: blog-backend-2-COMMIT_SHA
