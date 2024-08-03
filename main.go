@@ -2,6 +2,7 @@ package main
 
 import (
 	"blog-backend/controllers"
+	"blog-backend/diagnostics"
 	"blog-backend/docs"
 	"blog-backend/middleware"
 	"blog-backend/util"
@@ -10,6 +11,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"io/fs"
@@ -48,6 +51,10 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 	}
 }
 
+func init() {
+	prometheus.MustRegister(diagnostics.ArticlesCounter)
+}
+
 func main() {
 	flag.Parse()
 	logCleanup := util.InitLogger()
@@ -70,6 +77,7 @@ func main() {
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	r.Use(gin.Recovery())
 	r.Use(staticServer)
 	r.NoRoute(func(c *gin.Context) {
