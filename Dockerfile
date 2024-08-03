@@ -3,7 +3,7 @@ FROM node:18 as frontend-build
 
 WORKDIR /app
 COPY ./web .
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 # Build backend
