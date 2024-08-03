@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"blog-backend/database"
+	"blog-backend/diagnostics"
 	"blog-backend/models"
 	"blog-backend/storage"
 	"blog-backend/util"
@@ -85,6 +86,7 @@ func GetArticleBySlug(c *gin.Context) {
 		return
 	}
 
+	diagnostics.ArticlesCounter.WithLabelValues(slug).Inc()
 	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
