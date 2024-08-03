@@ -14,7 +14,11 @@ frontend_start:
 	npm --prefix ./web start
 
 docker_build:
-	docker build --build-arg NODE_AUTH_TOKEN=$(NODE_AUTH_TOKEN) . --file Dockerfile --tag ghcr.io/$(REPO)/$(REPO_NAME):$(COMMIT_SHA) --tag ghcr.io/$(REPO)/$(REPO_NAME):latest
+	docker build --build-arg NODE_AUTH_TOKEN=$(NODE_AUTH_TOKEN) . --file Dockerfile \
+	--tag ghcr.io/$(REPO)/$(REPO_NAME):$(COMMIT_SHA) \
+	--tag $(GAR_LOCATION)-docker.pkg.dev/$(PROJECT_ID)/$(REPO)/$(REPO_NAME):$(COMMIT_SHA) \
+	--tag ghcr.io/$(REPO)/$(REPO_NAME):latest \
+	--tag $(GAR_LOCATION)-docker.pkg.dev/$(PROJECT_ID)/$(REPO)/$(REPO_NAME):latest
 
 build_all: frontend_build swagger backend_build
 

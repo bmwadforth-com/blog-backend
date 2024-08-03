@@ -9,8 +9,17 @@ permissions:
   packages: write
   id-token: write
 
+env:
+  PROJECT_ID: 'digital-node-1176'
+  GAR_LOCATION: 'australia-southeast2'
+  REPOSITORY: 'blog-backend'
+  SERVICE: 'blog-backend-2'
+  REGION: 'australia-southeast1'
+  WIF_PROVIDER: 'projects/416443939101/locations/global/workloadIdentityPools/bmwadforth-iam/providers/bmwadforth-iam-github'
+  WIF_SA: 'bmwadforth-dev-ci@digital-node-1176.iam.gserviceaccount.com'
+
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,12 +35,12 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           token_format: access_token
-          workload_identity_provider: 'projects/416443939101/locations/global/workloadIdentityPools/bmwadforth-iam/providers/bmwadforth-iam-github'
-          service_account: 'bmwadforth-dev-ci@digital-node-1176.iam.gserviceaccount.com'
-      - name: Login to GCR
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.WIF_SA }}
+      - name: Login to GAR
         uses: docker/login-action@v3
         with:
-          registry: gcr.io
+          registry: ${{ env.GAR_LOCATION }}-docker.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
       - name: Login to GitHub Container Registry
@@ -41,14 +50,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Docker image
-        run: make NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} REPO=${{ github.repository_owner }} REPO_NAME=${{ github.event.repository.name }} COMMIT_SHA=${{ github.sha }} docker_build
-      - name: Push the Docker to GitHub
+        run: make NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }} REPO=${{ github.repository_owner }} REPO_NAME=${{ github.event.repository.name }} GAR_LOCATION=${{ env.GAR_LOCATION }} PROJECT_ID=${{ env.PROJECT_ID }} COMMIT_SHA=${{ github.sha }} docker_build
+      - name: Push the Docker to GitHub & GAR
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+          
+          docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
+          docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+
       - name: Deploy to Cloud Run
-        uses: 'google-github-actions/deploy-cloudrun@v1'
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: blog-backend-alpha
-          image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
-          region: australia-southeast1
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+          env_vars: |
+            WEB_TEMPLATE__PROJECTID=${{ env.PROJECT_ID }}
+            WEB_TEMPLATE__FIRESTOREDATABASE=bmwadforth-production
+            WEB_TEMPLATE__CLOUDSTORAGEBUCKET=bmwadforth
+            WEB_TEMPLATE__CONTENTURL=https://cdn.bmwadforth.com
+            WEB_TEMPLATE__GEMINISERVICE=gemini-n6b4oskuua-ts.a.run.app:443
+          secrets: |-
+            WEB_TEMPLATE__JWTSIGNINGKEY=WEB_TEMPLATE__JWTSIGNINGKEY:latest
+            WEB_TEMPLATE__APIKEY=WEB_TEMPLATE__APIKEY:latest
+            WEB_TEMPLATE__GEMINI_APIKEY=WEB_TEMPLATE__GEMINI_APIKEY:latest
+          revision_traffic: 'LATEST=100'
