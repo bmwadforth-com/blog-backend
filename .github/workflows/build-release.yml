@@ -7,8 +7,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    env:
-      NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     permissions:
       contents: read
       packages: write
@@ -41,6 +39,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Export NPM Token
+        run: export NODE_AUTH_TOKEN=${{ secrets.NPM_TOKEN }}
       #- name: Authenticate with private NPM package
       #  run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ./web/.npmrc
       - name: Build the Docker image
