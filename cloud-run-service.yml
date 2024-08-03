@@ -17,7 +17,7 @@ spec:
       serviceAccountName: bmwadforth-dev@digital-node-1176.iam.gserviceaccount.com
       containers:
         - name: blog-backend-1
-          image: ${GAR_IMAGE}
+          image: GAR_IMAGE
           ports:
             - name: http1
               containerPort: 8080
