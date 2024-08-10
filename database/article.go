@@ -17,14 +17,11 @@ const (
 	OrderByCreated OrderByOption = "created"
 )
 
-func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
+func GetArticle(articleId string, ctx context.Context) util.DataResponse[models.ArticleModel] {
 	var article models.ArticleModel
 	dataResponse := util.NewDataResponse("success", article)
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("articleId", "==", articleId).Documents(ctx).GetAll()
+	docs, err := DbConnection.Collection("articles").Where("articleId", "==", articleId).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -52,14 +49,11 @@ func GetArticle(articleId string) util.DataResponse[models.ArticleModel] {
 	return dataResponse
 }
 
-func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
+func GetArticleBySlug(slug string, ctx context.Context) util.DataResponse[models.ArticleModel] {
 	var article models.ArticleModel
 	dataResponse := util.NewDataResponse("success", article)
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
-	docs, err := client.Collection("articles").Where("slug", "==", slug).Where("published", "==", true).Documents(ctx).GetAll()
+	docs, err := DbConnection.Collection("articles").Where("slug", "==", slug).Where("published", "==", true).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -87,18 +81,15 @@ func GetArticleBySlug(slug string) util.DataResponse[models.ArticleModel] {
 	return dataResponse
 }
 
-func GetArticles(orderBy OrderByOption) util.DataResponse[[]models.ArticleModel] {
+func GetArticles(orderBy OrderByOption, ctx context.Context) util.DataResponse[[]models.ArticleModel] {
 	if orderBy == "" {
 		orderBy = "updated" // Default ordering
 	}
 
 	var articles []models.ArticleModel
 	dataResponse := util.NewDataResponse("successfully read articles", articles)
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
-	query := client.Collection("articles").Where("published", "==", true)
+	query := DbConnection.Collection("articles").Where("published", "==", true)
 	query = query.OrderBy(string(orderBy), firestore.Desc)
 
 	docs, err := query.Documents(ctx).GetAll()
@@ -120,14 +111,11 @@ func GetArticles(orderBy OrderByOption) util.DataResponse[[]models.ArticleModel]
 	return dataResponse
 }
 
-func CreateArticle(request models.CreateArticleRequest) util.DataResponse[string] {
+func CreateArticle(request models.CreateArticleRequest, ctx context.Context) util.DataResponse[string] {
 	dataResponse := util.NewDataResponse("successfully created article", "")
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
 	article := mapper.MapArticleCreatRequest(request)
-	_, _, err := client.Collection("articles").Add(ctx, article)
+	_, _, err := DbConnection.Collection("articles").Add(ctx, article)
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -138,13 +126,10 @@ func CreateArticle(request models.CreateArticleRequest) util.DataResponse[string
 	return dataResponse
 }
 
-func UpdateArticle(article models.ArticleModel) util.DataResponse[string] {
+func UpdateArticle(article models.ArticleModel, ctx context.Context) util.DataResponse[string] {
 	dataResponse := util.NewDataResponse("successfully updated article", "")
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
-	_, err := client.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
+	_, err := DbConnection.Collection("articles").Doc(article.DocumentRef).Set(ctx, map[string]interface{}{
 		"title":        article.Title,
 		"description":  article.Description,
 		"slug":         article.Slug,

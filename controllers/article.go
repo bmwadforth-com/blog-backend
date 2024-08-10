@@ -29,7 +29,7 @@ func CreateArticle(c *gin.Context) {
 		return
 	}
 
-	r := database.CreateArticle(request)
+	r := database.CreateArticle(request, c.Request.Context())
 	if r.GetError() != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
 		c.JSON(response.GetStatusCode(), response)
@@ -50,7 +50,7 @@ func CreateArticle(c *gin.Context) {
 // @Success 200 {object}  util.ApiResponse[[]models.ArticleModel]
 // @Router /articles [get]
 func GetArticles(c *gin.Context) {
-	r := database.GetArticles(database.OrderByUpdated)
+	r := database.GetArticles(database.OrderByUpdated, c.Request.Context())
 	if r.GetError() != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
 		c.JSON(response.GetStatusCode(), response)
@@ -74,7 +74,7 @@ func GetArticles(c *gin.Context) {
 func GetArticleBySlug(c *gin.Context) {
 	slug := c.Param("slug")
 
-	r := database.GetArticleBySlug(slug)
+	r := database.GetArticleBySlug(slug, c.Request.Context())
 	if r.GetError() != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
 
@@ -143,7 +143,7 @@ func UploadArticleContent(c *gin.Context) {
 		}
 	}
 
-	contentId, thumbnailId, err := storage.UploadArticleContent(articleId, contentFileMultiPart, thumbnailFileMultiPart)
+	contentId, thumbnailId, err := storage.UploadArticleContent(articleId, contentFileMultiPart, thumbnailFileMultiPart, c.Request.Context())
 	if err != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", err)
 		c.JSON(response.GetStatusCode(), response)

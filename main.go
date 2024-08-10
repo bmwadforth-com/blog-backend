@@ -2,12 +2,16 @@ package main
 
 import (
 	"blog-backend/controllers"
+	"blog-backend/database"
 	"blog-backend/diagnostics"
 	"blog-backend/docs"
 	"blog-backend/middleware"
 	"blog-backend/util"
+	"cloud.google.com/go/firestore"
+	"context"
 	"embed"
 	"flag"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -15,9 +19,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.uber.org/zap"
 	"io/fs"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,6 +33,10 @@ var (
 
 	//go:embed web/build
 	web embed.FS
+
+	logCleanup func(*zap.Logger)
+
+	r *gin.Engine
 )
 
 type embedFileSystem struct {
@@ -52,15 +62,10 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 }
 
 func init() {
-	prometheus.MustRegister(diagnostics.ArticlesCounter)
-}
+	ctx := context.Background()
+	logCleanup = util.InitLogger()
 
-func main() {
-	flag.Parse()
-	logCleanup := util.InitLogger()
-	defer logCleanup(util.Logger)
-
-	r := gin.New()
+	r = gin.New()
 
 	util.IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
 	if util.IsProduction {
@@ -71,6 +76,25 @@ func main() {
 		gin.SetMode(gin.DebugMode)
 		r.Use(gin.Logger())
 	}
+
+	var err error
+	database.DbConnection, err = firestore.NewClientWithDatabase(ctx, util.Config.ProjectId, util.Config.FireStoreDatabase)
+	if err != nil {
+		util.SLogger.Fatalf("failed to create firestore client: %v", err)
+	}
+
+	prometheus.MustRegister(diagnostics.ArticlesCounter)
+}
+
+func main() {
+	flag.Parse()
+	defer logCleanup(util.Logger)
+	defer func(DbConnection *firestore.Client) {
+		err := DbConnection.Close()
+		if err != nil {
+			util.SLogger.Fatalf("failed to close db client: %v", err)
+		}
+	}(database.DbConnection)
 
 	wwwroot := EmbedFolder(web, "web/build")
 	staticServer := static.Serve("/", wwwroot)
@@ -125,7 +149,7 @@ func main() {
 		util.SLogger.Fatalf("an error has occurred: %v", err)
 	}
 
-	err = r.Run()
+	err = r.Run(fmt.Sprintf(":%s", strconv.Itoa(*port)))
 	if err != nil {
 		util.SLogger.Fatalf("unable to start blog-backend: %v", err)
 	}
