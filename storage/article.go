@@ -3,6 +3,7 @@ package storage
 import (
 	"blog-backend/database"
 	"blog-backend/util"
+	"context"
 	"fmt"
 	"github.com/google/uuid"
 	"mime/multipart"
@@ -13,8 +14,8 @@ type MultipartFile struct {
 	FileSize int64
 }
 
-func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *MultipartFile) (string, string, error) {
-	dataResponse := database.GetArticle(articleId)
+func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *MultipartFile, ctx context.Context) (string, string, error) {
+	dataResponse := database.GetArticle(articleId, ctx)
 	if dataResponse.GetError() != nil {
 		return "", "", dataResponse.GetError()
 	}
@@ -31,7 +32,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			article.ThumbnailURL = fmt.Sprintf("%s/%s/%s", util.Config.ContentURL, article.Slug, article.ThumbnailId)
 		}
 
-		database.UpdateArticle(article)
+		database.UpdateArticle(article, ctx)
 	}
 
 	// Upload article content

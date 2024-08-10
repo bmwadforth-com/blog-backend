@@ -8,14 +8,11 @@ import (
 	"errors"
 )
 
-func CreateUser(request models.CreateUserRequest) util.DataResponse[string] {
+func CreateUser(request models.CreateUserRequest, ctx context.Context) util.DataResponse[string] {
 	dataResponse := util.NewDataResponse("successfully created user", "")
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
 	user := mapper.MapUserCreateRequest(request)
-	_, _, err := client.Collection("users").Add(ctx, user)
+	_, _, err := DbConnection.Collection("users").Add(ctx, user)
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse
@@ -26,14 +23,11 @@ func CreateUser(request models.CreateUserRequest) util.DataResponse[string] {
 	return dataResponse
 }
 
-func GetUserByUsername(username string) util.DataResponse[models.UserModel] {
+func GetUserByUsername(username string, ctx context.Context) util.DataResponse[models.UserModel] {
 	var user models.UserModel
 	dataResponse := util.NewDataResponse("success", user)
-	ctx := context.Background()
-	client, _ := createClient(ctx)
-	defer client.Close()
 
-	docs, err := client.Collection("users").Where("Username", "==", username).Documents(ctx).GetAll()
+	docs, err := DbConnection.Collection("users").Where("Username", "==", username).Documents(ctx).GetAll()
 	if err != nil {
 		dataResponse.SetError(err, util.DbresultError)
 		return dataResponse

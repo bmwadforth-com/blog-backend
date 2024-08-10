@@ -27,7 +27,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	r := database.CreateUser(request)
+	r := database.CreateUser(request, c.Request.Context())
 	if r.GetError() != nil {
 		response := util.NewResponse(http.StatusInternalServerError, "An error has occurred", "", r.GetError())
 		c.JSON(response.GetStatusCode(), response)
@@ -56,7 +56,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	valid, token, err := service.LoginUser(request)
+	valid, token, err := service.LoginUser(request, c.Request.Context())
 	if valid == false {
 		response := util.NewResponse(http.StatusUnauthorized, "Unsuccessful", "", err)
 		c.JSON(response.GetStatusCode(), response)

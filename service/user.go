@@ -4,6 +4,7 @@ import (
 	"blog-backend/database"
 	"blog-backend/models"
 	"blog-backend/util"
+	"context"
 	"errors"
 	"time"
 )
@@ -20,8 +21,8 @@ func comparePassword(password string, hashedPassword string) bool {
 	return false
 }
 
-func LoginUser(request models.LoginUserRequest) (bool, string, error) {
-	dataResponse := database.GetUserByUsername(request.Username)
+func LoginUser(request models.LoginUserRequest, ctx context.Context) (bool, string, error) {
+	dataResponse := database.GetUserByUsername(request.Username, ctx)
 
 	if dataResponse.GetError() != nil {
 		return false, "", dataResponse.GetError()
