@@ -22,7 +22,7 @@ spec:
       timeoutSeconds: 300
       serviceAccountName: bmwadforth-dev@digital-node-1176.iam.gserviceaccount.com
       containers:
-        - name: blog-backend-1
+        - name: application
           image: GAR_IMAGE
           ports:
             - name: http1
