@@ -9,7 +9,7 @@ RUN npm install
 RUN npm run build
 
 # Build backend
-FROM golang:1.21.3 as backend-build
+FROM golang:1.22.1 as backend-build
 
 ENV PORT=8080
 ENV APP_ENV=PRODUCTION
@@ -20,7 +20,7 @@ RUN go mod download
 RUN CGO_ENABLED=0 GOOS=linux go build -o ./blog-backend
 
 # Build production
-FROM golang:1.21.3 as production
+FROM golang:1.22.1 as production
 
 ENV PORT=8080
 ENV APP_ENV=PRODUCTION
