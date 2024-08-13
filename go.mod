@@ -5,7 +5,7 @@ go 1.22.1
 require (
 	cloud.google.com/go/firestore v1.16.0
 	cloud.google.com/go/storage v1.43.0
-	github.com/bmwadforth-com/armor-go v0.6.1
+	github.com/bmwadforth-com/armor-go v0.6.2
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/static v1.1.2
 	github.com/gin-gonic/gin v1.10.0

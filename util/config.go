@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-var Config configuration
+var Config *configuration
 var IsProduction bool
 
 type configuration struct {
@@ -26,6 +26,8 @@ func (c configuration) Validate() error {
 
 func SetupArmor() error {
 	IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
+
+	Config = &configuration{}
 
 	var configFile string
 	var err error
