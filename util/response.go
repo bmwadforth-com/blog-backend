@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"github.com/bmwadforth-com/armor-go/src/util"
 	"google.golang.org/grpc/codes"
 )
 
@@ -38,7 +39,7 @@ func (ae *ApiResponse[T]) SetData(data T) {
 }
 
 func (ae *ApiResponse[T]) SetError(error error) {
-	SLogger.Errorf("an error has occurred: %v", error.Error())
+	util.LogError("an error has occurred: %v", error.Error())
 	ae.Error = error.Error()
 }
 
@@ -88,7 +89,7 @@ func (de *DataResponse[T]) SetDatabaseResult(result EDatabaseResult) {
 }
 
 func (de *DataResponse[T]) SetError(error error, result EDatabaseResult) {
-	SLogger.Errorf("an error has occurred: %v", error.Error())
+	util.LogError("an error has occurred: %v", error.Error())
 	de.error = error
 	de.databaseResult = result
 }

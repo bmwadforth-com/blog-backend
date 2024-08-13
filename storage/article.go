@@ -5,6 +5,7 @@ import (
 	"blog-backend/util"
 	"context"
 	"fmt"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/google/uuid"
 	"mime/multipart"
 )
@@ -40,7 +41,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 		contentBytes := make([]byte, content.FileSize)
 		_, err := content.File.Read(contentBytes)
 		if err != nil {
-			util.SLogger.Errorf("failed to upload article content: %v", err)
+			armorUtil.LogError("failed to upload article content: %v", err)
 			return "", "", err
 		}
 
@@ -59,7 +60,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 		thumbnailBytes := make([]byte, thumbnail.FileSize)
 		_, err := thumbnail.File.Read(thumbnailBytes)
 		if err != nil {
-			util.SLogger.Errorf("failed to upload article thumbnail: %v", err)
+			armorUtil.LogError("failed to upload article thumbnail: %v", err)
 			return "", "", err
 		}
 

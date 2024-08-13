@@ -1,9 +1,8 @@
 package util
 
 import (
-	"context"
-	"encoding/json"
-	"github.com/sethvargo/go-envconfig"
+	armor "github.com/bmwadforth-com/armor-go/src"
+	"go.uber.org/zap/zapcore"
 	"os"
 	"path/filepath"
 )
@@ -21,35 +20,21 @@ type configuration struct {
 	ContentURL         string `json:"contentURL" env:"WEB_TEMPLATE__CONTENTURL"`
 }
 
-func LoadConfiguration() {
-	var configFile string
-	localConfigFile, err := filepath.Abs("config.local.json")
-	defaultConfigFile, err := filepath.Abs("config.json")
-	_, err = os.Stat(localConfigFile)
-	if err == nil {
-		configFile = localConfigFile
-	} else {
-		configFile = defaultConfigFile
-	}
-	if err != nil {
-		SLogger.Fatalf("an error has occurred: %v", err)
-	}
-
-	bytes, err := os.ReadFile(configFile)
-	if err != nil {
-		SLogger.Fatalf("an error has occurred: %v", err)
-	}
-
-	err = json.Unmarshal(bytes, &Config)
-	if err != nil {
-		SLogger.Fatalf("an error has occurred: %v", err)
-	}
+func (c configuration) Validate() error {
+	return nil
 }
 
-func LoadEnvironmentVariables() {
-	ctx := context.Background()
+func SetupArmor() error {
+	IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
 
-	if err := envconfig.Process(ctx, &Config); err != nil {
-		SLogger.Fatalf("an error has occurred: %v", err)
+	localConfigFile, err := filepath.Abs("config.local.json")
+	if err != nil {
+		return err
 	}
+	_, err = os.Stat(localConfigFile)
+	if err != nil {
+		return err
+	}
+
+	return armor.InitArmor(IsProduction, zapcore.InfoLevel, &Config, localConfigFile)
 }

@@ -3,16 +3,16 @@ package service
 import (
 	"blog-backend/database"
 	"blog-backend/models"
-	"blog-backend/util"
 	"context"
 	"errors"
+	"github.com/bmwadforth-com/armor-go/src/util/crypto"
 	"time"
 )
 
 var Sessions = map[string]models.UserSessionModel{}
 
 func comparePassword(password string, hashedPassword string) bool {
-	passwordMatch := util.PasswordHashMatch([]byte(hashedPassword), []byte(password))
+	passwordMatch, _ := crypto.PasswordHashMatch([]byte(hashedPassword), []byte(password))
 
 	if passwordMatch {
 		return true

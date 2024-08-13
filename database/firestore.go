@@ -1,9 +1,9 @@
 package database
 
 import (
-	"blog-backend/util"
 	"cloud.google.com/go/firestore"
 	"context"
+	util "github.com/bmwadforth-com/armor-go/src/util"
 )
 
 var DbConnection *firestore.Client
@@ -11,7 +11,7 @@ var DbConnection *firestore.Client
 func HealthCheck() error {
 	_, err := DbConnection.Collection("healthz").Documents(context.Background()).GetAll()
 	if err != nil {
-		util.SLogger.Errorf("database healthcheck failed: %v", err)
+		util.LogError("database healthcheck failed: %v", err)
 		return err
 	}
 

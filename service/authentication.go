@@ -3,51 +3,43 @@ package service
 import (
 	"blog-backend/util"
 	"context"
-	"fmt"
-	"github.com/bmwadforth/jwt"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
+	"github.com/bmwadforth-com/armor-go/src/util/jwt"
+	"github.com/bmwadforth-com/armor-go/src/util/jwt/common"
 	"google.golang.org/api/idtoken"
 	"time"
 )
 
-func NewBearerToken(username string) []byte {
+func NewBearerToken(username string) string {
 	key := []byte(util.Config.JwtSigningKey)
 
-	claims := jwt.NewClaimSet()
-	claims.Add(string(jwt.Audience), "blog-backend")
-	claims.Add(string(jwt.Subject), username)
-	claims.Add(string(jwt.IssuedAt), time.Now())
+	tokenBuilder := jwt.NewJWSToken(common.HS256, key)
 
-	//Create new HS256 token, set claims and key
-	token, err := jwt.New(jwt.HS256, claims, key)
+	claims := common.NewClaimSet()
+	claims.Add(string(common.Audience), "blog-backend")
+	claims.Add(string(common.Subject), username)
+	claims.Add(string(common.IssuedAt), time.Now())
+
+	token, err := tokenBuilder.AddClaims(claims).Serialize()
 	if err != nil {
-		fmt.Println(err.Error())
-		return nil
+		panic(err)
 	}
 
-	//Encode token
-	tokenBytes, err := token.Encode()
-	if err != nil {
-		fmt.Println(err.Error())
-		return nil
-	}
-
-	return tokenBytes
+	return token
 }
 
 func ValidateBearerToken(tokenString string) bool {
 	key := []byte(util.Config.JwtSigningKey)
 
-	//Parse token string
-	token, err := jwt.Parse(tokenString, key)
+	tokenBuilder, err := jwt.DecodeToken(tokenString, key)
 	if err != nil {
-		fmt.Println(err.Error())
+		armorUtil.LogError("token decode failed: %v", err)
 		return false
 	}
 
-	//Validate token
-	_, err = jwt.Validate(token)
+	_, err = tokenBuilder.Validate()
 	if err != nil {
-		fmt.Println(err.Error())
+		armorUtil.LogError("token validation failed: %v", err)
 		return false
 	}
 
@@ -57,14 +49,13 @@ func ValidateBearerToken(tokenString string) bool {
 func GetTokenClaims(tokenString string) map[string]interface{} {
 	key := []byte(util.Config.JwtSigningKey)
 
-	//Parse token string
-	token, err := jwt.Parse(tokenString, key)
+	tokenBuilder, err := jwt.DecodeToken(tokenString, key)
 	if err != nil {
-		fmt.Println(err.Error())
+		armorUtil.LogError("token decode failed: %v", err)
 		return nil
 	}
 
-	return token.Claims
+	return tokenBuilder.GetClaims()
 }
 
 func FetchIdentityToken(ctx context.Context, audience string) (string, error) {
