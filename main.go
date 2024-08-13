@@ -8,10 +8,11 @@ import (
 	"blog-backend/middleware"
 	"blog-backend/util"
 	"cloud.google.com/go/firestore"
-	"context"
 	"embed"
 	"flag"
 	"fmt"
+	armor "github.com/bmwadforth-com/armor-go/src"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -22,7 +23,6 @@ import (
 	"go.uber.org/zap"
 	"io/fs"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -62,37 +62,36 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 }
 
 func init() {
-	ctx := context.Background()
-	logCleanup = util.InitLogger()
+	var err error
+	err = util.SetupArmor()
+	if err != nil {
+		panic(err)
+	}
 
 	r = gin.New()
-
-	util.IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
 	if util.IsProduction {
-		util.LoadEnvironmentVariables()
 		gin.SetMode(gin.ReleaseMode)
 	} else {
-		util.LoadConfiguration()
 		gin.SetMode(gin.DebugMode)
 		r.Use(gin.Logger())
 	}
 
-	var err error
-	database.DbConnection, err = firestore.NewClientWithDatabase(ctx, util.Config.ProjectId, util.Config.FireStoreDatabase)
+	database.DbConnection, err = firestore.NewClientWithDatabase(armor.ArmorContext, util.Config.ProjectId, util.Config.FireStoreDatabase)
 	if err != nil {
-		util.SLogger.Fatalf("failed to create firestore client: %v", err)
+		armorUtil.SLogger.Fatalf("failed to create firestore client: %v", err)
 	}
 
 	prometheus.MustRegister(diagnostics.ArticlesCounter)
 }
 
 func main() {
+	defer armor.CleanupLogger(armorUtil.Logger)
+
 	flag.Parse()
-	defer logCleanup(util.Logger)
 	defer func(DbConnection *firestore.Client) {
 		err := DbConnection.Close()
 		if err != nil {
-			util.SLogger.Fatalf("failed to close db client: %v", err)
+			armorUtil.SLogger.Fatalf("failed to close db client: %v", err)
 		}
 	}(database.DbConnection)
 
@@ -146,11 +145,11 @@ func main() {
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {
-		util.SLogger.Fatalf("an error has occurred: %v", err)
+		armorUtil.SLogger.Fatalf("an error has occurred: %v", err)
 	}
 
 	err = r.Run(fmt.Sprintf(":%s", strconv.Itoa(*port)))
 	if err != nil {
-		util.SLogger.Fatalf("unable to start blog-backend: %v", err)
+		armorUtil.SLogger.Fatalf("unable to start blog-backend: %v", err)
 	}
 }

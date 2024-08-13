@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"cloud.google.com/go/storage"
 	"context"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"io"
 	"time"
 )
@@ -14,7 +15,7 @@ func streamFileUpload(object string, content []byte) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		util.SLogger.Errorf("failed to create cloud storage client: %v", err)
+		armorUtil.SLogger.Errorf("failed to create cloud storage client: %v", err)
 		return err
 	}
 	defer client.Close()
@@ -27,12 +28,12 @@ func streamFileUpload(object string, content []byte) error {
 	wc.ChunkSize = 0 // note retries are not supported for chunk size 0.
 
 	if _, err := io.Copy(wc, buf); err != nil {
-		util.SLogger.Errorf("failed to upload: %v", err)
+		armorUtil.SLogger.Errorf("failed to upload: %v", err)
 		return err
 	}
 
 	if err := wc.Close(); err != nil {
-		util.SLogger.Errorf("failed to upload: %v", err)
+		armorUtil.SLogger.Errorf("failed to upload: %v", err)
 		return err
 	}
 

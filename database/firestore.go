@@ -1,9 +1,9 @@
 package database
 
 import (
-	"blog-backend/util"
 	"cloud.google.com/go/firestore"
 	"context"
+	util "github.com/bmwadforth-com/armor-go/src/util"
 )
 
 var DbConnection *firestore.Client
