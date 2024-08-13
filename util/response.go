@@ -39,7 +39,7 @@ func (ae *ApiResponse[T]) SetData(data T) {
 }
 
 func (ae *ApiResponse[T]) SetError(error error) {
-	util.SLogger.Errorf("an error has occurred: %v", error.Error())
+	util.LogError("an error has occurred: %v", error.Error())
 	ae.Error = error.Error()
 }
 
@@ -89,7 +89,7 @@ func (de *DataResponse[T]) SetDatabaseResult(result EDatabaseResult) {
 }
 
 func (de *DataResponse[T]) SetError(error error, result EDatabaseResult) {
-	util.SLogger.Errorf("an error has occurred: %v", error.Error())
+	util.LogError("an error has occurred: %v", error.Error())
 	de.error = error
 	de.databaseResult = result
 }

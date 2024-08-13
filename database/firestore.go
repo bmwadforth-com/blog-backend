@@ -11,7 +11,7 @@ var DbConnection *firestore.Client
 func HealthCheck() error {
 	_, err := DbConnection.Collection("healthz").Documents(context.Background()).GetAll()
 	if err != nil {
-		util.SLogger.Errorf("database healthcheck failed: %v", err)
+		util.LogError("database healthcheck failed: %v", err)
 		return err
 	}
 

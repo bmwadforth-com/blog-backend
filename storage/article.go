@@ -41,7 +41,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 		contentBytes := make([]byte, content.FileSize)
 		_, err := content.File.Read(contentBytes)
 		if err != nil {
-			armorUtil.SLogger.Errorf("failed to upload article content: %v", err)
+			armorUtil.LogError("failed to upload article content: %v", err)
 			return "", "", err
 		}
 
@@ -60,7 +60,7 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 		thumbnailBytes := make([]byte, thumbnail.FileSize)
 		_, err := thumbnail.File.Read(thumbnailBytes)
 		if err != nil {
-			armorUtil.SLogger.Errorf("failed to upload article thumbnail: %v", err)
+			armorUtil.LogError("failed to upload article thumbnail: %v", err)
 			return "", "", err
 		}
 

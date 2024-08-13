@@ -15,7 +15,7 @@ func streamFileUpload(object string, content []byte) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		armorUtil.SLogger.Errorf("failed to create cloud storage client: %v", err)
+		armorUtil.LogError("failed to create cloud storage client: %v", err)
 		return err
 	}
 	defer client.Close()
@@ -28,12 +28,12 @@ func streamFileUpload(object string, content []byte) error {
 	wc.ChunkSize = 0 // note retries are not supported for chunk size 0.
 
 	if _, err := io.Copy(wc, buf); err != nil {
-		armorUtil.SLogger.Errorf("failed to upload: %v", err)
+		armorUtil.LogError("failed to upload: %v", err)
 		return err
 	}
 
 	if err := wc.Close(); err != nil {
-		armorUtil.SLogger.Errorf("failed to upload: %v", err)
+		armorUtil.LogError("failed to upload: %v", err)
 		return err
 	}
 
@@ -51,7 +51,7 @@ func CloudStorageHealthCheck() error {
 
 	_, err = client.Collection("healthz").Documents(ctx).GetAll()
 	if err != nil {
-		util.SLogger.Errorf("database healthcheck failed: %v", err)
+		util.LogError("database healthcheck failed: %v", err)
 		return err
 	}
 

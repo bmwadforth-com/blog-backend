@@ -2,6 +2,7 @@ package util
 
 import (
 	armor "github.com/bmwadforth-com/armor-go/src"
+	"go.uber.org/zap/zapcore"
 	"os"
 	"path/filepath"
 )
@@ -35,5 +36,5 @@ func SetupArmor() error {
 		return err
 	}
 
-	return armor.InitArmor(IsProduction, &Config, localConfigFile)
+	return armor.InitArmor(IsProduction, zapcore.InfoLevel, &Config, localConfigFile)
 }

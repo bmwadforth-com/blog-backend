@@ -78,20 +78,20 @@ func init() {
 
 	database.DbConnection, err = firestore.NewClientWithDatabase(armor.ArmorContext, util.Config.ProjectId, util.Config.FireStoreDatabase)
 	if err != nil {
-		armorUtil.SLogger.Fatalf("failed to create firestore client: %v", err)
+		armorUtil.LogFatal("%v", err)
 	}
 
 	prometheus.MustRegister(diagnostics.ArticlesCounter)
 }
 
 func main() {
-	defer armor.CleanupLogger(armorUtil.Logger)
+	defer armor.CleanupLogger()
 
 	flag.Parse()
 	defer func(DbConnection *firestore.Client) {
 		err := DbConnection.Close()
 		if err != nil {
-			armorUtil.SLogger.Fatalf("failed to close db client: %v", err)
+			armorUtil.LogFatal("%v", err)
 		}
 	}(database.DbConnection)
 
