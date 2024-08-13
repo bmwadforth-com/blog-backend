@@ -27,14 +27,18 @@ func (c configuration) Validate() error {
 func SetupArmor() error {
 	IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
 
-	localConfigFile, err := filepath.Abs("config.local.json")
-	if err != nil {
-		return err
-	}
-	_, err = os.Stat(localConfigFile)
-	if err != nil {
-		return err
+	var configFile string
+	var err error
+	if !IsProduction {
+		configFile, err = filepath.Abs("config.local.json")
+		if err != nil {
+			return err
+		}
+		_, err = os.Stat(configFile)
+		if err != nil {
+			return err
+		}
 	}
 
-	return armor.InitArmor(IsProduction, zapcore.InfoLevel, &Config, localConfigFile)
+	return armor.InitArmor(IsProduction, zapcore.InfoLevel, &Config, configFile)
 }
