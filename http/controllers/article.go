@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"blog-backend/database"
+	"blog-backend/data/database"
+	"blog-backend/data/models"
+	"blog-backend/data/storage"
 	"blog-backend/diagnostics"
-	"blog-backend/models"
-	"blog-backend/storage"
 	"blog-backend/util"
 	"errors"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,6 +37,8 @@ func CreateArticle(c *gin.Context) {
 		return
 	}
 
+	armorUtil.LogInfo("new article created with title %s", request.Title)
+
 	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
@@ -57,6 +60,7 @@ func GetArticles(c *gin.Context) {
 		return
 	}
 
+	armorUtil.LogInfo("new request to get articles")
 	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
@@ -86,6 +90,7 @@ func GetArticleBySlug(c *gin.Context) {
 		return
 	}
 
+	armorUtil.LogInfo("new request to get article with slug: %s", slug)
 	diagnostics.ArticlesCounter.WithLabelValues(slug).Inc()
 	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
 	c.JSON(response.GetStatusCode(), response)

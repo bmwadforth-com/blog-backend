@@ -1,8 +1,8 @@
 package database
 
 import (
-	"blog-backend/mapper"
-	"blog-backend/models"
+	"blog-backend/data/mapper"
+	"blog-backend/data/models"
 	"blog-backend/util"
 	"context"
 	"errors"

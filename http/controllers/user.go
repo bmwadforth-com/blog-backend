@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"blog-backend/database"
-	"blog-backend/models"
+	"blog-backend/data/database"
+	"blog-backend/data/models"
 	"blog-backend/service"
 	"blog-backend/util"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -34,6 +35,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	armorUtil.LogInfo("new request to create user with username: %s", request.Username)
 	response := util.NewResponse(http.StatusOK, r.Message, r.Data, nil)
 	c.JSON(response.GetStatusCode(), response)
 }
@@ -63,6 +65,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
+	armorUtil.LogInfo("username: %s has logged in", request.Username)
 	response := util.NewResponse(http.StatusOK, "Successful", token, nil)
 	c.JSON(response.GetStatusCode(), response)
 }

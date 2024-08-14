@@ -1,17 +1,17 @@
 package controllers
 
 import (
-	pb "blog-backend/protocol_buffers/gemini_service"
+	"blog-backend/grpc/protocol_buffers/gemini_service"
 	"blog-backend/service"
 	"blog-backend/util"
 	"context"
 	"fmt"
+	armorUtil "github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -35,13 +35,13 @@ func attachTokenToContext(ctx context.Context, token string) context.Context {
 // @Success 200 {object}  util.ApiResponse[string]
 // @Router /gemini [get]
 func QueryGemini(c *gin.Context) {
-	conn, err := grpc.Dial(util.Config.GeminiService, grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
+	conn, err := grpc.NewClient(util.Config.GeminiService, grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		armorUtil.LogFatal("%v", err)
 	}
 	defer conn.Close()
 
-	client := pb.NewGeminiClient(conn)
+	client := gemini.NewGeminiClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
@@ -55,9 +55,9 @@ func QueryGemini(c *gin.Context) {
 	}
 	ctxWithIDToken := attachTokenToContext(ctxWithAPIKey, token)
 
-	r, err := client.QueryGemini(ctxWithIDToken, &pb.QueryRequest{Query: c.Query("query")})
+	r, err := client.QueryGemini(ctxWithIDToken, &gemini.QueryRequest{Query: c.Query("query")})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		armorUtil.LogFatal("%v", err)
 	}
 
 	var messages []string

@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"blog-backend/database"
+	"blog-backend/data/database"
 	"blog-backend/util"
 	"context"
 	"fmt"
@@ -73,6 +73,8 @@ func UploadArticleContent(articleId string, content *MultipartFile, thumbnail *M
 			return "", "", err
 		}
 	}
+
+	armorUtil.LogInfo("article id: %s content persisted with content id: %s and thumbnail id: %s", articleId, article.ContentId, article.ThumbnailId)
 
 	return article.ContentId, article.ThumbnailId, nil
 }

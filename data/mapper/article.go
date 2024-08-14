@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"blog-backend/models"
+	"blog-backend/data/models"
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 	"time"

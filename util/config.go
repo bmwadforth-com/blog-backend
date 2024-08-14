@@ -28,10 +28,12 @@ func SetupArmor() error {
 	IsProduction = os.Getenv("APP_ENV") == "PRODUCTION"
 
 	Config = &configuration{}
+	var lvl = zapcore.InfoLevel
 
 	var configFile string
 	var err error
 	if !IsProduction {
+		lvl = zapcore.DebugLevel
 		configFile, err = filepath.Abs("config.local.json")
 		if err != nil {
 			return err
@@ -42,5 +44,5 @@ func SetupArmor() error {
 		}
 	}
 
-	return armor.InitArmor(IsProduction, zapcore.InfoLevel, &Config, configFile)
+	return armor.InitArmor(IsProduction, lvl, &Config, configFile)
 }

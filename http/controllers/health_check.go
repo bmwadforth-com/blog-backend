@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"blog-backend/database"
+	"blog-backend/data/database"
 	"blog-backend/util"
 	"errors"
 	"github.com/gin-gonic/gin"

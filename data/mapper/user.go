@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"blog-backend/models"
+	"blog-backend/data/models"
 	"github.com/bmwadforth-com/armor-go/src/util"
 	"github.com/bmwadforth-com/armor-go/src/util/crypto"
 	"github.com/google/uuid"

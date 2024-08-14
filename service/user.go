@@ -1,8 +1,8 @@
 package service
 
 import (
-	"blog-backend/database"
-	"blog-backend/models"
+	"blog-backend/data/database"
+	"blog-backend/data/models"
 	"context"
 	"errors"
 	"github.com/bmwadforth-com/armor-go/src/util/crypto"
@@ -36,13 +36,13 @@ func LoginUser(request models.LoginUserRequest, ctx context.Context) (bool, stri
 			UserId:   dataResponse.Data.UserId,
 			Username: dataResponse.Data.Username,
 			LoggedIn: time.Now(),
-			Token:    string(token),
+			Token:    token,
 			Active:   true,
 		}
 
 		Sessions[dataResponse.Data.Username] = session
 
-		return true, string(token), nil
+		return true, token, nil
 	}
 
 	return false, "", errors.New("challenge failed")

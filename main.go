@@ -1,11 +1,11 @@
 package main
 
 import (
-	"blog-backend/controllers"
-	"blog-backend/database"
+	"blog-backend/data/database"
 	"blog-backend/diagnostics"
 	"blog-backend/docs"
-	"blog-backend/middleware"
+	controllers2 "blog-backend/http/controllers"
+	"blog-backend/http/middleware"
 	"blog-backend/util"
 	"cloud.google.com/go/firestore"
 	"embed"
@@ -125,23 +125,23 @@ func main() {
 
 	v1 := r.Group("/api/v1")
 	v1.GET("/metrics", gin.WrapH(promhttp.Handler()))
-	v1.GET("/ping", controllers.Ping)
-	v1.GET("/healthz", controllers.HealthCheck)
-	v1.GET("/articles", controllers.GetArticles)
-	v1.GET("/article/:slug", controllers.GetArticleBySlug)
-	v1.POST("/login", controllers.LoginUser)
+	v1.GET("/ping", controllers2.Ping)
+	v1.GET("/healthz", controllers2.HealthCheck)
+	v1.GET("/articles", controllers2.GetArticles)
+	v1.GET("/article/:slug", controllers2.GetArticleBySlug)
+	v1.POST("/login", controllers2.LoginUser)
 
 	v1ApiKeyAuthenticated := r.Group("/api/v1")
 	v1ApiKeyAuthenticated.Use(middleware.ApiKeyAuthenticationMiddleware())
-	v1ApiKeyAuthenticated.POST("/user", controllers.CreateUser)
+	v1ApiKeyAuthenticated.POST("/user", controllers2.CreateUser)
 
 	v1BearerAuthenticated := r.Group("/api/v1")
 	v1BearerAuthenticated.Use(middleware.BearerAuthenticationMiddleware())
-	v1BearerAuthenticated.POST("/article", controllers.CreateArticle)
-	v1BearerAuthenticated.POST("/article/:articleId/content", controllers.UploadArticleContent)
-	v1BearerAuthenticated.GET("/sessions", controllers.GetSessions)
-	v1BearerAuthenticated.GET("/gemini", controllers.QueryGemini)
-	v1BearerAuthenticated.GET("/status", controllers.GetStatus)
+	v1BearerAuthenticated.POST("/article", controllers2.CreateArticle)
+	v1BearerAuthenticated.POST("/article/:articleId/content", controllers2.UploadArticleContent)
+	v1BearerAuthenticated.GET("/sessions", controllers2.GetSessions)
+	v1BearerAuthenticated.GET("/gemini", controllers2.QueryGemini)
+	v1BearerAuthenticated.GET("/status", controllers2.GetStatus)
 
 	err := r.SetTrustedProxies([]string{})
 	if err != nil {

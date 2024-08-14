@@ -25,6 +25,8 @@ func NewBearerToken(username string) string {
 		panic(err)
 	}
 
+	armorUtil.LogInfo("new token generated for username: %s", username)
+
 	return token
 }
 
@@ -33,13 +35,13 @@ func ValidateBearerToken(tokenString string) bool {
 
 	tokenBuilder, err := jwt.DecodeToken(tokenString, key)
 	if err != nil {
-		armorUtil.LogError("token decode failed: %v", err)
+		armorUtil.LogError("%v", err)
 		return false
 	}
 
 	_, err = tokenBuilder.Validate()
 	if err != nil {
-		armorUtil.LogError("token validation failed: %v", err)
+		armorUtil.LogError("%v", err)
 		return false
 	}
 
@@ -51,7 +53,7 @@ func GetTokenClaims(tokenString string) map[string]interface{} {
 
 	tokenBuilder, err := jwt.DecodeToken(tokenString, key)
 	if err != nil {
-		armorUtil.LogError("token decode failed: %v", err)
+		armorUtil.LogError("%v", err)
 		return nil
 	}
 
