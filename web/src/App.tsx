@@ -107,13 +107,13 @@ function Layout() {
                         </Toolbar>
                     </AppBar>
 
-                    <Box component="main" sx={{ flexGrow: 1, py: 4, px: 2, display: 'flex', justifyContent: 'center' }}>
+                    <Paper component="main" id="content" square elevation={6} style={{ padding: '50px 0' }}>
                         <Container maxWidth="lg">
                             <ErrorBoundary>
                                 <Outlet />
                             </ErrorBoundary>
                         </Container>
-                    </Box>
+                    </Paper>
 
                     <BottomNavigation
                         sx={{  py: 2, width: '100%' }}
