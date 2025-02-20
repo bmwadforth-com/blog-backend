@@ -1,28 +1,40 @@
-import React, {createContext, Suspense, useContext} from 'react';
+import React, { createContext, Suspense, useContext } from 'react';
 import {
     Container,
     Paper,
     createTheme,
     ThemeProvider,
-    useMediaQuery, BottomNavigation, BottomNavigationAction, Tooltip, Button
+    useMediaQuery,
+    BottomNavigation,
+    BottomNavigationAction,
+    Tooltip,
+    Button,
+    AppBar,
+    Toolbar,
+    Typography,
+    Box,
+    useTheme,
+    Hidden
 } from '@mui/material';
 import {
-    createBrowserRouter, createRoutesFromElements, Outlet,
-    Route, RouterProvider, ScrollRestoration, useNavigate
+    createBrowserRouter,
+    createRoutesFromElements,
+    Outlet,
+    Route,
+    RouterProvider,
+    ScrollRestoration,
+    useNavigate
 } from "react-router-dom";
 import ArticlesPage from "./pages/articles/articles";
 import ArticleViewPage from "./pages/articles/articleView";
 import NotFoundPage from "./pages/notFoundPage";
-import {LinkedIn, GitHub, Instagram} from '@mui/icons-material';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { LinkedIn, GitHub, Instagram } from '@mui/icons-material';
 import ErrorBoundary from './pages/errorPage';
 import AdminPage from './pages/adminPage';
-import {useRecoilValue} from "recoil";
+import { useRecoilValue } from "recoil";
 import userState from "./store/articles/userState";
 import LoginPage from "./pages/loginPage";
-import {Spinner} from "reactstrap";
+import { Spinner } from "reactstrap";
 import ReactGA from 'react-ga';
 import AboutPage from "./pages/aboutPage";
 
@@ -65,13 +77,14 @@ function Layout() {
     const user = useRecoilValue(userState);
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const navigate = useNavigate();
+    const theme = useTheme();
 
-    const theme = React.useMemo(
+
+    const appliedTheme = React.useMemo(
         () =>
             createTheme({
                 palette: {
                     mode: prefersDarkMode ? 'dark' : 'light',
-
                 },
             }),
         [prefersDarkMode],
@@ -79,44 +92,45 @@ function Layout() {
 
     return (
         <NavigationContext.Provider value={navigate}>
-            <ThemeProvider theme={theme}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Bmwadforth<b>dot</b>com
-                        </Typography>
+            <ThemeProvider theme={appliedTheme}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                Bmwadforth<b>dot</b>com
+                            </Typography>
+                            <Hidden smDown>
+                                <Button color="inherit" href="https://www.instagram.com/bmwadforth/" target="_blank" rel="noopener noreferrer">Instagram</Button>
+                                <Button color="inherit" href="https://www.linkedin.com/in/brannon-wadforth-959b06120/" target="_blank" rel="noopener noreferrer">LinkedIn</Button>
+                                <Button color="inherit" href="https://github.com/bmwadforth" target="_blank" rel="noopener noreferrer">GitHub</Button>
+                            </Hidden>
+                        </Toolbar>
+                    </AppBar>
 
-                        {/*<Button color="inherit" onClick={() => navigate(ApplicationRoutes.INDEX)}>Home</Button>
-                        <Button color="inherit" onClick={() => navigate(ApplicationRoutes.ABOUT)}>About</Button>*/}
-                        <Button color="inherit" href="https://www.instagram.com/bmwadforth/" target="_blank" rel="noopener noreferrer">Instagram</Button>
-                        <Button color="inherit" href="https://www.linkedin.com/in/brannon-wadforth-959b06120/" target="_blank" rel="noopener noreferrer">LinkedIn</Button>
-                        <Button color="inherit" href="https://github.com/bmwadforth" target="_blank" rel="noopener noreferrer">GitHub</Button>
-                    </Toolbar>
-                </AppBar>
+                    <Box component="main" sx={{ flexGrow: 1, py: 4, px: 2, display: 'flex', justifyContent: 'center' }}>
+                        <Container maxWidth="lg">
+                            <ErrorBoundary>
+                                <Outlet />
+                            </ErrorBoundary>
+                        </Container>
+                    </Box>
 
-                <Paper id="content" square elevation={6} style={{ padding: '50px 0' }}>
-                    <Container>
-                        <ErrorBoundary>
-                            <Outlet />
-                        </ErrorBoundary>
-                    </Container>
-                </Paper>
-
-                <BottomNavigation
-                    sx={{ padding: 2 }}
-                    showLabels
-                >
-                    <Tooltip title="Connect on Instagram">
-                        <BottomNavigationAction label="Instagram" icon={<Instagram />} onClick={() => window.open('https://www.instagram.com/bmwadforth/')} />
-                    </Tooltip>
-                    <Tooltip title="Connect on LinkedIn">
-                        <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />} onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
-                    </Tooltip>
-                    <Tooltip title="Connect on GitHub">
-                        <BottomNavigationAction label="GitHub" icon={<GitHub />} onClick={() => window.open('https://github.com/bmwadforth')} />
-                    </Tooltip>
-                </BottomNavigation>
-                <ScrollRestoration />
+                    <BottomNavigation
+                        sx={{  py: 2, width: '100%' }}
+                        showLabels
+                    >
+                        <Tooltip title="Connect on Instagram">
+                            <BottomNavigationAction label="Instagram" icon={<Instagram />} onClick={() => window.open('https://www.instagram.com/bmwadforth/')} />
+                        </Tooltip>
+                        <Tooltip title="Connect on LinkedIn">
+                            <BottomNavigationAction label="LinkedIn" icon={<LinkedIn />} onClick={() => window.open('https://www.linkedin.com/in/brannon-wadforth-959b06120/')} />
+                        </Tooltip>
+                        <Tooltip title="Connect on GitHub">
+                            <BottomNavigationAction label="GitHub" icon={<GitHub />} onClick={() => window.open('https://github.com/bmwadforth')} />
+                        </Tooltip>
+                    </BottomNavigation>
+                    <ScrollRestoration />
+                </Box>
             </ThemeProvider>
         </NavigationContext.Provider>
     );
