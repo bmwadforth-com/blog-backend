@@ -93,13 +93,13 @@ function Layout() {
     return (
         <NavigationContext.Provider value={navigate}>
             <ThemeProvider theme={appliedTheme}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}> {/* Added for full-height layout */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
                     <AppBar position="static">
                         <Toolbar>
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                 Bmwadforth<b>dot</b>com
                             </Typography>
-                            <Hidden smDown> {/* Hide buttons on smaller screens */}
+                            <Hidden smDown>
                                 <Button color="inherit" href="https://www.instagram.com/bmwadforth/" target="_blank" rel="noopener noreferrer">Instagram</Button>
                                 <Button color="inherit" href="https://www.linkedin.com/in/brannon-wadforth-959b06120/" target="_blank" rel="noopener noreferrer">LinkedIn</Button>
                                 <Button color="inherit" href="https://github.com/bmwadforth" target="_blank" rel="noopener noreferrer">GitHub</Button>
